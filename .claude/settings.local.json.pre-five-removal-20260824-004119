@@ -1,0 +1,21 @@
+{
+  "skillOverrides": {
+    "agent-browser": "off",
+    "anysearch": "off",
+    "caveman": "off",
+    "convert-documents-to-markdown": "off",
+    "design-doc-mermaid": "off",
+    "documentation-writer": "off",
+    "frontend-design": "off",
+    "liteparse": "off",
+    "nbo-digital-trigger-monthly-scripts": "off",
+    "nbo-model-validation-monthly-scripts": "off",
+    "nbo-telesales-monthly-scripts": "off",
+    "sequential-thinking": "off",
+    "to-issues": "off",
+    "to-prd": "off",
+    "write-a-skill": "off",
+    "find-skills": "off"
+  },
+  "outputStyle": "ELI5"
+}
