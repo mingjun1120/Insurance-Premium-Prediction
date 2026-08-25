@@ -21,7 +21,9 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "ipykernel>=7.3.0",
+    # Pinned below 7 - ipykernel 7 hangs on kernel restart in VS Code
+    # https://github.com/microsoft/vscode-jupyter/issues/17410
+    "ipykernel>=6.29.5,<7",
     "jupyterlab>=4.6.3",
     "pytest>=9.1.1",
     "ruff>=0.16.3",
