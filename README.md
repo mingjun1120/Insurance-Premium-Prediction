@@ -100,7 +100,7 @@ been fine in git.
 uv run dvc remote modify --local azureremote connection_string "<your connection string>"
 ```
 
-Get the string from the Azure portal: storage account `insurancedvc1120` -> Security + networking
+Get the string from the Azure portal: storage account `insurancedvc` -> Security + networking
 -> Access keys -> Show -> Connection string.
 
 ### Everyday commands
