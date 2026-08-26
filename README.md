@@ -293,6 +293,62 @@ April 2025. This notebook is written against **0.7.21** - `Dataset`, `DataDefini
 Reports with `include_tests=True`. Evidently pins `plotly<6` in every 0.7.x release, which is
 why `plotly` is capped below 6 in `pyproject.toml`.
 
+## Tests
+
+```bash
+uv run pytest
+```
+
+109 tests, about 7 seconds. `pytest` is configured in `pyproject.toml` to skip the `slow`
+marker by default.
+
+| File | Guards |
+| --- | --- |
+| `test_clean.py` | each of the 7 cleaning rules, one planted problem at a time |
+| `test_config.py` | `config.yml` still has every key the code reads |
+| `test_train.py` | the right pipeline is built for each of the 5 models |
+| `test_predict.py` | **predictions come back in dollars** |
+| `test_api.py` | both endpoints, and that bad input is refused |
+
+### Tests are split by what they need
+
+`data/` and `models/` are DVC-tracked and gitignored, so a fresh clone does not have them.
+Rather than fail, the tests that need the real artefacts carry a skip marker:
+
+```
+with the artefacts present : 108 passed
+without them               :  80 passed, 28 skipped
+```
+
+Every skip names the reason - `models/model.pkl is DVC-tracked and absent here - run
+`uv run dvc pull`` - so nothing goes quietly missing. This is what lets CI run the suite
+with no Azure connection string, and keeps it working after the storage account is gone.
+
+The prediction tests mostly avoid the problem entirely: the `fake_bundle` fixture trains a
+five-tree forest on fifty invented rows and saves a real bundle to a temp folder. The
+log-transform logic is therefore tested everywhere, including on a fresh clone.
+
+### Cleaning tests use invented data
+
+The real dataset triggers almost none of the cleaning rules - it arrives with no gaps, no
+constant columns and no high-cardinality columns. Testing against it proves the code *runs*,
+not that it *works*. Each test instead starts from twelve well-formed rows and plants exactly
+one problem, so a failure has exactly one possible cause.
+
+### The golden-number test
+
+```bash
+uv run pytest -m slow
+```
+
+One test asserts the shipped model still scores RMSE $4,193, MAE $1,974, R2 0.9043 and MAPE
+0.1655. It guards the class of bug the CatBoost test-set leak was: a silent change in
+behaviour that breaks nothing and raises nothing, visible only by comparing a number against
+one written down earlier. It runs the whole pipeline, so it is excluded from the default run.
+
+If it fails after a deliberate change, update the expected values in the same commit that
+caused them to move, and say why.
+
 ## Switching models
 
 Change **one line** in `config.yml`:
@@ -379,6 +435,13 @@ samples.json                three real rows for testing the API
 .dvc/config                 DVC remote: Azure container and account name
 data.dvc                    pointer to the DVC-tracked data/ folder
 models.dvc                  pointer to the DVC-tracked models/ folder
+tests/
+    conftest.py             fixtures and the DVC skip markers
+    test_clean.py           the 7 cleaning rules
+    test_config.py          config.yml keys
+    test_train.py           pipeline shape per model
+    test_predict.py         predictions are in dollars
+    test_api.py             endpoints and validation
 steps/
     __init__.py             PROJECT_ROOT and load_config
     ingest.py               read the raw CSV
@@ -400,4 +463,4 @@ mlflow/                     MLflow output, gitignored
 
 ## Not built yet
 
-CI/CD and tests.
+CI/CD.
