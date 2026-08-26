@@ -1,0 +1,38 @@
+# Everything the serving image does not need. Keeping these out shrinks the
+# build context from well over a gigabyte to a few megabytes, which is why
+# `docker build` starts almost instantly instead of uploading .venv.
+
+# Local virtualenv - the image builds its own with `uv sync`
+.venv
+
+# Version control and DVC internals
+.git
+.gitignore
+.dvc
+.dvcignore
+*.dvc
+
+# MLflow output, rewritten on every training run
+mlflow/
+
+# Training data - the model is already fitted and baked in
+data/
+
+# Analysis, not serving
+notebooks/
+main.py
+
+# Python noise
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+.ruff_cache/
+
+# Docs and editor config
+README.md
+.vscode/
+.idea/
