@@ -1,0 +1,5 @@
+[core]
+    remote = azureremote
+['remote "azureremote"']
+    url = azure://dvcstore
+    account_name = insurancedvc1120
