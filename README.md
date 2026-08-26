@@ -18,6 +18,9 @@ steps/ingest.py   ->  steps/clean.py  ->  steps/train.py  ->  steps/predict.py
     |
     v
 main.py  ->  models/model.pkl  +  MLflow run (params, metrics, model, config)
+                    |
+                    v
+              app.py (FastAPI)  ->  Dockerfile  ->  container on port 8000
 ```
 
 ## Getting started
@@ -78,6 +81,88 @@ Then open <http://127.0.0.1:5000>.
 
 Everything MLflow writes lives under `mlflow/` - the run metadata in `mlflow/mlflow.db` and the
 saved models in `mlflow/mlruns/`. Both paths are named in `config.yml`.
+
+## Serving the model
+
+`app.py` puts the trained model behind an HTTP API.
+
+```bash
+uv run uvicorn app:app --reload
+```
+
+Then open <http://127.0.0.1:8000/docs> for an interactive page where you can fill in a
+form and see the prediction - no curl needed.
+
+| Endpoint | What it does |
+| --- | --- |
+| `GET /` | Health check. Reports the model name and whether the log transform is on. |
+| `POST /predict` | One person in, one premium out. |
+
+```bash
+curl -X POST http://127.0.0.1:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"age":19,"sex":"female","bmi":27.9,"children":0,"smoker":"yes","region":"southwest"}'
+```
+
+```json
+{"predicted_premium": 18095.88, "currency": "USD", "model": "RandomForestRegressor"}
+```
+
+`samples.json` holds three real rows - the cheapest, the median and the dearest customer
+in the dataset - so there is always something valid to paste in.
+
+### Input is checked against the training data
+
+The API rejects anything outside the range the model was actually fitted on, with a `422`
+and a reason:
+
+| Field | Accepted | Where the limit comes from |
+| --- | --- | --- |
+| `age` | 18-64 | exact range in the data |
+| `bmi` | 15-55 | data covers 15.96-53.13, widened slightly |
+| `children` | 0-5 | exact range in the data |
+| `sex` | `female`, `male` | the only values present |
+| `smoker` | `yes`, `no` | the only values present |
+| `region` | the four US regions | the only values present |
+
+A model asked about a 90 year old has never seen one and would answer confidently anyway.
+Refusing is more honest than returning a number nobody should trust.
+
+### The API and the pipeline share one prediction path
+
+`app.py` does not load the pickle itself. It calls `Predictor.predict_records()` in
+`steps/predict.py`, the same class `main.py` uses for scoring. That class owns undoing the
+log transform, ordering the columns and setting the `category` dtype - all driven by the
+saved bundle rather than by anything hardcoded.
+
+This matters because of the log transform. A model fitted on `log1p(charges)` returns
+about `9.7` where the answer is `$16,000`. An API that forgot to call `expm1` would not
+crash; it would return a plausible number that is wrong by a factor of 1,600.
+
+## Docker
+
+```bash
+uv run dvc pull                          # models/model.pkl must exist first
+docker build -t insurance-premium .
+docker run --rm -p 8000:8000 insurance-premium
+```
+
+The image is **1.02 GB** and holds 40 packages, against 257 in the development
+environment. Three things keep it down:
+
+- **`--no-dev`** leaves out MLflow, DVC, SHAP, seaborn, sweetviz and JupyterLab. An API
+  never logs an experiment or draws a chart.
+- **A two-stage build** means uv (58 MB) builds the virtualenv and is then left behind.
+- **`nvidia-nccl-cu13` is uninstalled** - 288 MB of CUDA that XGBoost's Linux wheel pulls
+  in for multi-GPU training. There is no GPU here, and XGBoost predicts fine without it.
+
+LightGBM, XGBoost and CatBoost all stay in, even though they are most of the remaining
+size. Any of the five models in `config.yml` could be the one inside `model.pkl`, and
+unpickling it needs the library it came from. Dropping them would save around 500 MB and
+quietly break "switch models by editing one line".
+
+`dvc pull` is not run inside the build on purpose - it would bake the Azure connection
+string into an image layer, readable by anyone who has the image.
 
 ## Data and model versioning
 
@@ -227,6 +312,9 @@ travels **with** the model.
 ```
 config.yml                  every pipeline setting
 main.py                     entry point, with and without MLflow
+app.py                      FastAPI service
+Dockerfile                  two-stage serving image
+samples.json                three real rows for testing the API
 .dvc/config                 DVC remote: Azure container and account name
 data.dvc                    pointer to the DVC-tracked data/ folder
 models.dvc                  pointer to the DVC-tracked models/ folder
@@ -249,4 +337,4 @@ mlflow/                     MLflow output, gitignored
 
 ## Not built yet
 
-FastAPI serving, Docker, Evidently drift monitoring, CI/CD and tests.
+Evidently drift monitoring, CI/CD and tests.
