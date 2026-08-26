@@ -1,0 +1,128 @@
+# Configuration for the training pipeline (main.py).
+#
+# Everything the pipeline needs lives here, so a run can be reproduced from this
+# file alone. MLflow saves a copy of it with every run.
+
+data:
+  # Notebook 01 writes this file. It is the raw input; steps/clean.py does the
+  # cleaning, so this is deliberately NOT data/cleaned_data.csv.
+  data_path: data/merged_data.csv
+  target: charges
+
+train:
+  test_size: 0.2
+  random_state: 42
+  # Decided in notebook 03 section 4.3 by cross-validating on the training split
+  # only. Models are fitted on log1p(charges); every metric is still reported in
+  # dollars, because the pipeline inverts the transform before scoring.
+  use_log_target: true
+
+# ============ CHANGE THIS ONE LINE TO SWITCH MODELS ============
+model:
+  name: RandomForestRegressor
+
+  # false -> fit once with the params below (fast, and they are already the
+  #          tuned winners from notebook 03)
+  # true  -> run GridSearchCV over tuning_params. Roughly 44x slower.
+  tune: false
+
+  store_path: models/
+
+  k_fold:
+    n_splits: 5
+    shuffle: true
+    random_state: 42
+
+# Every model keeps its own settings, because they do not share parameter names.
+# CatBoost says random_seed / depth / iterations where the others say
+# random_state / max_depth / n_estimators, and min_samples_leaf exists only on
+# the forest. The Trainer reads only the block named above.
+#
+# Preprocessing is NOT configured here. The Trainer derives it from the model
+# name: the three boosting libraries read category columns natively, the forest
+# needs one-hot encoding, and the linear model needs one-hot, scaling and term
+# expansion. See steps/train.py.
+models:
+
+  RandomForestRegressor:
+    params:
+      random_state: 42
+      n_jobs: -1
+      n_estimators: 300
+      max_depth: 8
+      min_samples_leaf: 8
+    tuning_params:
+      model__n_estimators: [300, 600]
+      model__max_depth: [null, 8, 12]
+      model__min_samples_leaf: [1, 4, 8]
+
+  LGBMRegressor:
+    params:
+      objective: regression
+      random_state: 42
+      n_jobs: -1
+      verbose: -1
+      n_estimators: 100
+      learning_rate: 0.05
+      max_depth: 3
+    tuning_params:
+      model__n_estimators: [100, 300]
+      model__learning_rate: [0.01, 0.05, 0.1]
+      model__max_depth: [3, 5, -1]
+
+  XGBRegressor:
+    params:
+      objective: reg:squarederror
+      random_state: 42
+      n_jobs: -1
+      # Both of these are required before XGBoost will accept a category column
+      enable_categorical: true
+      tree_method: hist
+      n_estimators: 100
+      learning_rate: 0.05
+      max_depth: 3
+    tuning_params:
+      model__n_estimators: [100, 300]
+      model__learning_rate: [0.01, 0.05, 0.1]
+      model__max_depth: [3, 5, 7]
+
+  CatBoostRegressor:
+    params:
+      loss_function: RMSE
+      random_seed: 42
+      verbose: 0
+      # Without this CatBoost writes a catboost_info/ log folder on every fit
+      allow_writing_files: false
+      iterations: 300
+      learning_rate: 0.05
+      depth: 7
+    tuning_params:
+      model__iterations: [100, 300]
+      model__learning_rate: [0.01, 0.05, 0.1]
+      model__depth: [3, 5, 7]
+
+  LinearRegression:
+    # These configure the term expansion, not the regressor. Plain least squares
+    # has nothing to tune. degree 2 won in notebook 03 section 4.12.2, because a
+    # linear model cannot discover the smoker x bmi interaction on its own.
+    params:
+      degree: 2
+      interaction_only: false
+    tuning_params:
+      expand__degree: [1, 2]
+      expand__interaction_only: [true, false]
+
+mlflow:
+  experiment_name: Insurance Premium Prediction
+  registered_model_name: insurance_premium_model
+  developer: lim_ming_jun
+
+  # Both paths are relative to the project root and live under mlflow/, so the
+  # root stays tidy and one .gitignore line covers everything MLflow writes.
+  #
+  # They are set explicitly rather than left to MLflow's defaults, because
+  # MLflow builds its default paths by URL-encoding the working directory. This
+  # project's path contains spaces and an "&", which would turn into real
+  # folders named "Personal%20Project" sitting next to the real one.
+  tracking_db: mlflow/mlflow.db     # run metadata, in SQLite
+  artifact_location: mlflow/mlruns  # saved models and config snapshots
