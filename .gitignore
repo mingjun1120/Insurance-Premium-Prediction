@@ -8,3 +8,6 @@ wheels/
 
 # Virtual environments
 .venv
+
+# MLflow tracking data, written on every run
+mlflow/
