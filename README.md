@@ -232,6 +232,67 @@ Anything else lists what is still missing, and the fix is `dvc push`.
 > lapses, Azure decommissions the resources and `dvc pull` stops working. Upgrade to
 > pay-as-you-go before then; at 5.5 MB the ongoing cost is a fraction of a cent per month.
 
+## Monitoring for drift
+
+A model is only correct about the world it was trained on. When that world moves, the model
+does not notice - it keeps answering, just as confidently. `notebooks/04_monitoring.ipynb` uses
+[Evidently](https://docs.evidentlyai.com) to look for that movement.
+
+```bash
+uv run jupyter lab notebooks/04_monitoring.ipynb
+```
+
+It writes two HTML reports to `reports/` (gitignored, regenerated on every run):
+
+| Report | Compares | Purpose |
+| --- | --- | --- |
+| `baseline_drift.html` | train split vs test split | the **healthy** case - nothing should have moved |
+| `production_drift.html` | train split vs `data/production.csv` | the **alarm** case - things moved on purpose |
+
+Running only the alarm case would be a trap. A report full of red tells you nothing unless you
+have seen the same report come back green on data you know is fine.
+
+### The production data is simulated
+
+This project uses a static Kaggle file, so there is no real incoming traffic. Section 5.3 of the
+notebook *invents* `data/production.csv` by shifting the data deliberately - an ageing book,
+rising BMI, a worse smoking mix, and expansion into one region. **The drift found there is drift
+we put there.** That is honest for learning the tool; it is not evidence about the real world.
+
+`charges` is withheld from the production file on purpose. In production you get the features
+when someone applies, but you do not learn their real medical costs until much later. That gap
+is the central difficulty of monitoring a live model.
+
+### What it found
+
+| | Baseline (expect none) | Production (expect drift) |
+| --- | --- | --- |
+| Columns drifted | 3 of 8 | **4 of 7** |
+| Share | 37.5% - below the 50% line | **57.1% - dataset drift declared** |
+| Worst column | `prediction` 0.129 | `prediction` 0.515 |
+
+Two results are worth more than the headline:
+
+- **The healthy baseline was not perfectly clean.** Three columns crossed the 0.1 threshold by a
+  hair, on two halves of the same shuffle where nothing changed. That is sampling noise across
+  268 rows, and it is why the dataset-level *share* is the number to watch rather than any
+  single column.
+- **Evidently nearly missed a change we made on purpose.** `smoker` was moved from 20.5% to 32%
+  and scored **0.0969 - under the threshold, marked `ok`**. Jensen-Shannon distance on a
+  two-value column is blunt. Meanwhile `bmi`, nudged by 3 points, scored 0.45. A drift score is
+  evidence, not a verdict.
+
+`prediction` drifting hardest in the production report is the useful signal: nobody touched that
+column. It moved because the inputs moved and the model followed them. Where ground truth takes
+months to arrive, prediction drift is often the earliest warning available.
+
+### A note on Evidently versions
+
+Both reference projects use the pre-0.7 API (`evidently.report`, `ColumnMapping`), removed in
+April 2025. This notebook is written against **0.7.21** - `Dataset`, `DataDefinition`, and
+Reports with `include_tests=True`. Evidently pins `plotly<6` in every 0.7.x release, which is
+why `plotly` is capped below 6 in `pyproject.toml`.
+
 ## Switching models
 
 Change **one line** in `config.yml`:
@@ -328,8 +389,10 @@ notebooks/
     01_load_data.ipynb              data loading
     02_eda_and_preprocessing.ipynb  EDA and data preparation
     03_model_training.ipynb         modelling, comparison, SHAP
+    04_monitoring.ipynb             Evidently drift reports
 data/                       insurance.csv, merged_data.csv, cleaned_data.csv - DVC-tracked
 models/                     model.pkl and the notebook's winning model - DVC-tracked
+reports/                    Evidently HTML output, gitignored
 mlflow/                     MLflow output, gitignored
     mlflow.db               run metadata
     mlruns/                 saved models and config snapshots
@@ -337,4 +400,4 @@ mlflow/                     MLflow output, gitignored
 
 ## Not built yet
 
-Evidently drift monitoring, CI/CD and tests.
+CI/CD and tests.
