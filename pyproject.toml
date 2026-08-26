@@ -33,11 +33,15 @@ dev = [
     "dvc[azure]>=3.67.1",
     # Pinned below 7 - ipykernel 7 hangs on kernel restart in VS Code
     # https://github.com/microsoft/vscode-jupyter/issues/17410
+    "evidently>=0.7.21",
     "ipykernel>=6.29.5,<7",
     "jupyterlab>=4.6.3",
     "matplotlib>=3.11.1",
     "mlflow>=3.15.1",
-    "plotly>=6.9.0",
+    # Capped below 6 by evidently, which pins plotly<6 in every 0.7.x release.
+    # The notebooks only use px.bar/box/histogram/scatter, go.Figure/Heatmap/
+    # Scatter and pio.renderers - all unchanged since plotly 4.
+    "plotly>=5.24,<6",
     "pytest>=9.1.1",
     "ruff>=0.16.3",
     "seaborn>=0.13.2",
