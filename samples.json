@@ -1,0 +1,26 @@
+[
+    {
+        "age": 18,
+        "sex": "male",
+        "bmi": 23.21,
+        "children": 0,
+        "smoker": "no",
+        "region": "southeast"
+    },
+    {
+        "age": 51,
+        "sex": "male",
+        "bmi": 35.97,
+        "children": 1,
+        "smoker": "no",
+        "region": "southeast"
+    },
+    {
+        "age": 54,
+        "sex": "female",
+        "bmi": 47.41,
+        "children": 0,
+        "smoker": "yes",
+        "region": "southeast"
+    }
+]
