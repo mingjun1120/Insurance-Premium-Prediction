@@ -30,10 +30,21 @@ Dependencies are managed with [uv](https://docs.astral.sh/uv/):
 uv sync
 ```
 
-### 2. Prepare the data
+### 2. Get the data and models
 
-`data/insurance.csv` is the raw download. Notebook 01 writes `data/merged_data.csv`,
-which is what the pipeline reads:
+`data/` and `models/` are **not in git**. They are versioned with DVC and stored in Azure
+Blob Storage, so a fresh clone contains only the pointer files `data.dvc` and `models.dvc`.
+Pull the real files:
+
+```bash
+uv run dvc pull
+```
+
+This needs Azure credentials - see [Data and model versioning](#data-and-model-versioning).
+
+Without them, start from the raw data instead: download the Kaggle US Health Insurance
+dataset to `data/insurance.csv`, then run notebook 01, which writes `data/merged_data.csv`
+- the file the pipeline actually reads.
 
 ```bash
 uv run jupyter lab notebooks/01_load_data.ipynb
@@ -67,6 +78,46 @@ Then open <http://127.0.0.1:5000>.
 
 Everything MLflow writes lives under `mlflow/` - the run metadata in `mlflow/mlflow.db` and the
 saved models in `mlflow/mlruns/`. Both paths are named in `config.yml`.
+
+## Data and model versioning
+
+`data/` and `models/` are tracked by [DVC](https://dvc.org), not git. Git holds two small text
+pointers - `data.dvc` and `models.dvc` - while the real files live in Azure Blob Storage.
+
+The reason is `models/model.pkl`: it is 2.7 MB of binary and it is rewritten on **every**
+training run. Committing it would add 2.7 MB to the repository each time, permanently, with no
+way to shrink it afterwards. `data/` rides along for consistency, though at 168 KB it would have
+been fine in git.
+
+| | Where it lives |
+| --- | --- |
+| `.dvc/config` | committed - the container URL and storage account name |
+| `.dvc/config.local` | **never committed** - the connection string, gitignored by DVC |
+
+### Setting up credentials
+
+```bash
+uv run dvc remote modify --local azureremote connection_string "<your connection string>"
+```
+
+Get the string from the Azure portal: storage account `insurancedvc1120` -> Security + networking
+-> Access keys -> Show -> Connection string.
+
+### Everyday commands
+
+```bash
+uv run dvc pull      # download data/ and models/ from Azure
+uv run dvc add data models   # record the current version after changing them
+uv run dvc push      # upload the new version to Azure
+uv run dvc checkout  # restore the version matching the current git commit
+```
+
+The usual rhythm is `dvc add` -> `git commit` the changed `.dvc` file -> `dvc push`.
+
+> **Trial expiry.** The Azure storage account sits on a free trial with $200 of credit, valid
+> 30 days from sign-up (check the exact date in the portal - around 2026-09-25). When the trial
+> lapses, Azure decommissions the resources and `dvc pull` stops working. Upgrade to
+> pay-as-you-go before then; at 5.5 MB the ongoing cost is a fraction of a cent per month.
 
 ## Switching models
 
@@ -148,6 +199,9 @@ travels **with** the model.
 ```
 config.yml                  every pipeline setting
 main.py                     entry point, with and without MLflow
+.dvc/config                 DVC remote: Azure container and account name
+data.dvc                    pointer to the DVC-tracked data/ folder
+models.dvc                  pointer to the DVC-tracked models/ folder
 steps/
     __init__.py             PROJECT_ROOT and load_config
     ingest.py               read the raw CSV
@@ -158,8 +212,8 @@ notebooks/
     01_load_data.ipynb              data loading
     02_eda_and_preprocessing.ipynb  EDA and data preparation
     03_model_training.ipynb         modelling, comparison, SHAP
-data/                       insurance.csv, merged_data.csv, cleaned_data.csv
-models/                     model.pkl and the notebook's winning model
+data/                       insurance.csv, merged_data.csv, cleaned_data.csv - DVC-tracked
+models/                     model.pkl and the notebook's winning model - DVC-tracked
 mlflow/                     MLflow output, gitignored
     mlflow.db               run metadata
     mlruns/                 saved models and config snapshots
@@ -167,5 +221,4 @@ mlflow/                     MLflow output, gitignored
 
 ## Not built yet
 
-FastAPI serving, Docker, DVC data versioning, Evidently drift monitoring, CI/CD and
-tests.
+FastAPI serving, Docker, Evidently drift monitoring, CI/CD and tests.
