@@ -4,31 +4,43 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
+# Everything needed to SERVE a prediction, and nothing else. The Docker image
+# installs only these (`uv sync --frozen --no-dev`), which keeps it around 700 MB
+# instead of 1.6 GB.
+#
+# The three boosting libraries stay here on purpose. Any of the five models in
+# config.yml can be the one that ends up in models/model.pkl, and unpickling it
+# needs the library it came from. Dropping them would save ~400 MB and quietly
+# break "switch models by editing one line".
 dependencies = [
     "catboost>=1.2.10",
-    "dvc[azure]>=3.67.1",
     "fastapi>=0.141.1",
     "joblib>=1.5.3",
     "lightgbm>=4.7.0",
-    "matplotlib>=3.11.1",
-    "mlflow>=3.15.1",
     "numpy>=2.5.2",
     "pandas>=2.3.3,<3",
-    "plotly>=6.9.0",
     "pyyaml>=6.0.3",
     "scikit-learn>=1.9.0",
-    "seaborn>=0.13.2",
-    "shap>=0.52.0",
-    "sweetviz>=2.3.3",
+    "uvicorn>=0.52.4",
     "xgboost>=3.4.1",
 ]
 
+# Training, experiment tracking, data versioning and analysis. Needed on a
+# developer machine, never inside the serving container. `uv sync` installs
+# these by default; only Docker passes --no-dev.
 [dependency-groups]
 dev = [
+    "dvc[azure]>=3.67.1",
     # Pinned below 7 - ipykernel 7 hangs on kernel restart in VS Code
     # https://github.com/microsoft/vscode-jupyter/issues/17410
     "ipykernel>=6.29.5,<7",
     "jupyterlab>=4.6.3",
+    "matplotlib>=3.11.1",
+    "mlflow>=3.15.1",
+    "plotly>=6.9.0",
     "pytest>=9.1.1",
     "ruff>=0.16.3",
+    "seaborn>=0.13.2",
+    "shap>=0.52.0",
+    "sweetviz>=2.3.3",
 ]
