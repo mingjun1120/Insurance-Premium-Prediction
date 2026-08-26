@@ -4,6 +4,7 @@ import logging
 
 import joblib
 import numpy as np
+import pandas as pd
 from sklearn.metrics import (
     mean_absolute_error,
     mean_absolute_percentage_error,
@@ -31,6 +32,8 @@ class Predictor:
         self.model = self.artefact["model"]
         self.model_name = self.artefact["model_name"]
         self.use_log_target = self.artefact["use_log_target"]
+        self.feature_order = self.artefact["feature_order"]
+        self.categorical_features = self.artefact["categorical_features"]
 
     def load_model(self):
         """Read the saved artefact bundle.
@@ -67,6 +70,36 @@ class Predictor:
         """
         predicted = self.model.predict(X)
         return np.expm1(predicted) if self.use_log_target else predicted
+
+    def predict_records(self, records):
+        """Predict charges from plain dictionaries of features.
+
+        This is what `app.py` calls. It builds the DataFrame the model expects
+        from the bundle itself - `feature_order` fixes the column order and
+        `categorical_features` decides which columns get the `category` dtype
+        that LightGBM, XGBoost and CatBoost require. Neither list is written
+        down anywhere else, so the API cannot drift away from how the model was
+        actually fitted.
+
+        Args:
+            records (list[dict]): One dictionary per person, keyed by feature
+                name. Extra keys are dropped; the order of keys does not matter.
+
+        Returns:
+            list[float]: Predicted charges in dollars, one per record.
+
+        Examples:
+            >>> Predictor().predict_records(
+            ...     [{"age": 19, "sex": "female", "bmi": 27.9,
+            ...       "children": 0, "smoker": "yes", "region": "southwest"}]
+            ... )
+            [16797.34...]
+        """
+        frame = pd.DataFrame(records, columns=self.feature_order)
+        for column in self.categorical_features:
+            frame[column] = frame[column].astype("category")
+
+        return [float(value) for value in self.predict(frame)]
 
     def evaluate_model(self, X, y):
         """Score the model on one split, in dollars.
