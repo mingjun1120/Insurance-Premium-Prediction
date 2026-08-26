@@ -48,3 +48,13 @@ dev = [
     "shap>=0.52.0",
     "sweetviz>=2.3.3",
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# `slow` covers tests that run the whole pipeline against the real data. They
+# are excluded by default so `uv run pytest` stays fast enough to run often;
+# `uv run pytest -m slow` runs them when training behaviour has changed.
+addopts = "-m 'not slow'"
+markers = [
+    "slow: runs the full pipeline on the real dataset (needs `dvc pull`)",
+]
