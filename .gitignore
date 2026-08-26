@@ -11,3 +11,5 @@ wheels/
 
 # MLflow tracking data, written on every run
 mlflow/
+/data
+/models
