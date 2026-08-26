@@ -106,13 +106,41 @@ Get the string from the Azure portal: storage account `insurancedvc` -> Security
 ### Everyday commands
 
 ```bash
-uv run dvc pull      # download data/ and models/ from Azure
+uv run dvc pull              # download data/ and models/ from Azure
 uv run dvc add data models   # record the current version after changing them
-uv run dvc push      # upload the new version to Azure
-uv run dvc checkout  # restore the version matching the current git commit
+uv run dvc push              # upload the new version to Azure
+uv run dvc checkout          # restore the version matching the current git commit
+uv run dvc status --cloud    # check whether the remote has everything
 ```
 
-The usual rhythm is `dvc add` -> `git commit` the changed `.dvc` file -> `dvc push`.
+### After every training run
+
+`main.py` rewrites `models/model.pkl`. Git will not notice, because `models/` is
+ignored now - so the new version has to be recorded by hand. Three steps, in this
+order:
+
+```bash
+uv run python main.py           # model.pkl changes
+
+uv run dvc add data models      # 1. DVC:   note the new version
+git add models.dvc              # 2. git:   save the new pointer
+git commit -m "..."
+uv run dvc push                 # 3. Azure: store the new file
+```
+
+**Skipping step 3 is the mistake to watch for.** The commit still succeeds, so nothing
+looks wrong locally - but `models.dvc` now points at a file that exists only on your
+machine. The next person to run `dvc pull` gets an error, and so will you on your next
+computer.
+
+If you are ever unsure whether a push went through:
+
+```bash
+uv run dvc status --cloud
+```
+
+`Cache and remote 'azureremote' are in sync.` means everything is safely in Azure.
+Anything else lists what is still missing, and the fix is `dvc push`.
 
 > **Trial expiry.** The Azure storage account sits on a free trial with $200 of credit, valid
 > 30 days from sign-up (check the exact date in the portal - around 2026-09-25). When the trial
