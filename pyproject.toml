@@ -58,3 +58,21 @@ addopts = "-m 'not slow'"
 markers = [
     "slow: runs the full pipeline on the real dataset (needs `dvc pull`)",
 ]
+
+[tool.ruff]
+# Pinned deliberately. Relying on ruff's built-in defaults means a routine ruff
+# upgrade can turn CI red on code nobody touched.
+line-length = 100
+# Notebooks are exploratory: long one-off display lines are the point of them.
+extend-exclude = ["notebooks"]
+
+[tool.ruff.lint]
+# E/F catch real mistakes, I keeps imports sorted, W trims whitespace,
+# UP keeps syntax current, B flags the bug patterns that are easy to write.
+select = ["E", "F", "I", "W", "UP", "B"]
+
+[tool.ruff.lint.isort]
+# Stated outright because a local `mlflow/` folder (it holds mlflow.db) makes
+# ruff guess that `import mlflow` is our own package and sort it as first-party.
+known-first-party = ["steps", "tests"]
+known-third-party = ["mlflow"]

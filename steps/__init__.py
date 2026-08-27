@@ -37,7 +37,7 @@ def load_config(path=CONFIG_PATH):
     if not Path(path).exists():
         raise FileNotFoundError(f"No configuration file at {path}")
 
-    with open(path, "r", encoding="utf-8") as file:
+    with open(path, encoding="utf-8") as file:
         return yaml.safe_load(file)
 
 
