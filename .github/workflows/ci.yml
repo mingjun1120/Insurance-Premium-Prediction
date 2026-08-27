@@ -1,0 +1,46 @@
+# Lint and test on every push and every pull request.
+#
+# This workflow deliberately needs no secrets. The test suite skips anything
+# that requires models/model.pkl or data/, both of which DVC owns and git
+# ignores, so a runner with no Azure credentials still executes most of it.
+# That keeps CI honest, fast, and alive even if the Azure account goes away.
+#
+# Deployment lives in cd.yml, which does need secrets.
+
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# A second push to the same branch makes the first run pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
+
+      # --frozen fails if uv.lock disagrees with pyproject.toml, so a
+      # hand-edited dependency that was never locked cannot slip through.
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Lint
+        run: uv run ruff check .
+
+      # -v so the skipped tests, and the reason each one skipped, are visible
+      # in the log rather than hidden behind a count.
+      - name: Test
+        run: uv run pytest -v
