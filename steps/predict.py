@@ -93,7 +93,7 @@ class Predictor:
             ...     [{"age": 19, "sex": "female", "bmi": 27.9,
             ...       "children": 0, "smoker": "yes", "region": "southwest"}]
             ... )
-            [16797.34...]
+            [18095.88...]
         """
         frame = pd.DataFrame(records, columns=self.feature_order)
         for column in self.categorical_features:
