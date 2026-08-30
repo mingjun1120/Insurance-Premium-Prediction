@@ -186,20 +186,20 @@ the real data.
 
 ## 8. Docker
 
-Two stages (`Dockerfile:14` and `Dockerfile:48`). Four decisions that are not obvious:
+Two stages (`Dockerfile:18` and `Dockerfile:48`). Four decisions that are not obvious:
 
 1. `uv sync --frozen --no-dev` drops **217 of 257 packages** — MLflow, DVC, SHAP,
-   seaborn, sweetviz and JupyterLab (`Dockerfile:38-40`).
+   seaborn, sweetviz and JupyterLab (`Dockerfile:34-36`, the `RUN` at 42-43).
 2. `uv pip uninstall nvidia-nccl-cu13` reclaims **288 MB**. XGBoost's Linux wheel
    declares it, but NCCL only does multi-GPU communication and this container has no
    GPU. It has to happen in the same `RUN` or the files stay in the layer below and
-   nothing is reclaimed (`Dockerfile:41-46`).
-3. `apt-get install libgomp1` (`Dockerfile:52-55`). All three boosting libraries link
+   nothing is reclaimed (`Dockerfile:37-43`).
+3. `apt-get install libgomp1` (`Dockerfile:50-55`). All three boosting libraries link
    against OpenMP. `python:3.12-slim` does not ship it, and the failure is a bare
    `libgomp.so.1: cannot open shared object file` that explains nothing.
 4. **`dvc pull` never runs inside the build** (`Dockerfile:7-10`). It would bake the
    Azure connection string into an image layer. `COPY models/ ./models/`
-   (`Dockerfile:64`) means the artefact must already exist on disk before
+   (`Dockerfile:63`) means the artefact must already exist on disk before
    `docker build` is run.
 
 ---
@@ -208,7 +208,7 @@ Two stages (`Dockerfile:14` and `Dockerfile:48`). Four decisions that are not ob
 
 **DVC** (`.dvc/config`): remote `azureremote`, `url = azure://dvcstore`,
 `account_name = insurancedvc`. **No credential is stored in the repo.** `data/` is
-175,490 bytes across 4 files (`data.dvc`); `models/` is 5,420,143 bytes across 2
+179,490 bytes across 4 files (`data.dvc`); `models/` is 5,420,143 bytes across 2
 (`models.dvc`). Both directories are git-ignored (`.gitignore`, `/data` and
 `/models`).
 
