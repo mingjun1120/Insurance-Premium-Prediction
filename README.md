@@ -5,7 +5,16 @@ number of children, smoking status and region - on the Kaggle US Health Insuranc
 dataset (1,338 rows).
 
 The project follows CRISP-DM across three notebooks, then hardens the result into a
-configurable training pipeline with experiment tracking.
+configurable training pipeline with experiment tracking, a container image, and a
+deployment pipeline that ships it.
+
+[![CI](https://github.com/mingjun1120/Insurance-Premium-Prediction/actions/workflows/ci.yml/badge.svg)](https://github.com/mingjun1120/Insurance-Premium-Prediction/actions/workflows/ci.yml)
+[![CD](https://github.com/mingjun1120/Insurance-Premium-Prediction/actions/workflows/cd.yml/badge.svg)](https://github.com/mingjun1120/Insurance-Premium-Prediction/actions/workflows/cd.yml)
+
+**Live API:** <https://insurance-premium-api.ambitiousgrass-8ecc70a2.malaysiawest.azurecontainerapps.io/docs>
+
+> Running on an Azure free trial that expires around 25 September 2026. After that the
+> URL stops answering. Everything else in this repository still runs locally.
 
 ## Pipeline
 
@@ -21,6 +30,12 @@ main.py  ->  models/model.pkl  +  MLflow run (params, metrics, model, config)
                     |
                     v
               app.py (FastAPI)  ->  Dockerfile  ->  container on port 8000
+                                                          |
+                                                          v
+push to master -> GitHub Actions -> test -> build -> Azure Container Registry
+                                                          |
+                                                          v
+                                              Azure Container Apps (live URL)
 ```
 
 ## Getting started
@@ -349,6 +364,98 @@ one written down earlier. It runs the whole pipeline, so it is excluded from the
 If it fails after a deliberate change, update the expected values in the same commit that
 caused them to move, and say why.
 
+## Continuous integration and deployment
+
+Two workflows in `.github/workflows/`, split by whether they need credentials.
+
+| Workflow | Trigger | Needs Azure | Duration |
+| --- | --- | --- | --- |
+| `ci.yml` | every push and every pull request | no | ~30s |
+| `cd.yml` | pushes to `master` | yes | ~3.5min |
+
+### CI runs without any credentials
+
+The test suite skips anything requiring `models/model.pkl` or `data/`, both DVC-owned
+and git-ignored, so a bare runner still executes 80 of the 109 tests:
+
+```
+80 passed, 28 skipped, 1 deselected in 4.57s
+```
+
+That is deliberate. CI stays green independently of the Azure subscription, gives pull
+requests a check that an expired trial cannot block, and needs no secret to be
+configured before someone can fork the repo and run it.
+
+### CD stores no secrets either
+
+Nothing long-lived is kept on either side. `azure/login` uses OIDC: GitHub mints a
+token for each run, and Microsoft Entra trades it for an Azure access token only if it
+matches a federated credential pinned to this repository and this branch.
+
+```
+repo:mingjun1120@54136320/Insurance-Premium-Prediction@1347131480:ref:refs/heads/master
+```
+
+A fork cannot match that. Nor can a pull request, or another branch.
+
+`dvc pull` needs no credential either, which is the part worth explaining. The
+committed `.dvc/config` carries only `account_name`; the connection string lives in
+`.dvc/config.local`, which git ignores and which therefore does not exist on a runner.
+Given an account name and no explicit credential, DVC falls through to
+`DefaultAzureCredential`, which picks up the `az login` that `azure/login` just
+performed.
+
+So the three values in GitHub are repository **variables**, not secrets - they are
+identifiers, not passwords:
+
+```
+AZURE_CLIENT_ID  AZURE_TENANT_ID  AZURE_SUBSCRIPTION_ID
+```
+
+### Three narrow roles instead of Contributor
+
+Most guides grant `Contributor` on the resource group because it is one assignment and
+always works. It also means a leak hands over everything in the group.
+
+| Identity | Role | Scope | Why |
+| --- | --- | --- | --- |
+| the pipeline | `AcrPush` | registry | upload the built image |
+| the pipeline | `Storage Blob Data Reader` | storage | let `dvc pull` read the model |
+| the pipeline | `Container Apps Contributor` | the app | point it at the new tag |
+| the app | `AcrPull` | registry | read its own image at start-up |
+
+The pipeline writes images; the app only reads them. Note that `Owner` and
+`Contributor` on a storage account do **not** grant access to the blobs inside it -
+that is a separate data-plane role family, and its absence is a `403` that looks
+like an authentication bug.
+
+### The deploy refuses to ship a model whose numbers moved
+
+Two steps make this a model pipeline rather than a deploy script.
+
+`pytest -m slow` recomputes RMSE against the real data on the runner and fails the run
+if the shipped model no longer scores what [Results](#results) claims - before anything
+is built or pushed.
+
+The closing step then asks the deployed URL for a real prediction and rejects an answer
+that is not in dollars:
+
+```
+predicted premium 18095.88 - looks like dollars
+```
+
+A deploy that reports success while the app returns 502, or quietly serves `log1p`
+dollars, is worse than one that fails.
+
+### Every revision maps to one commit
+
+Images are tagged with the commit sha rather than `latest`, so the running container
+can always be traced back to the code that produced it:
+
+```
+insurancemlops.azurecr.io/insurance-api:4a536c32d99c5fcf15708b14da3d4a6b045e3425
+```
+
 ## Switching models
 
 Change **one line** in `config.yml`:
@@ -427,6 +534,9 @@ travels **with** the model.
 ## Layout
 
 ```
+.github/workflows/
+    ci.yml                  ruff and pytest, no credentials
+    cd.yml                  test, build, push, deploy, smoke test
 config.yml                  every pipeline setting
 main.py                     entry point, with and without MLflow
 app.py                      FastAPI service
@@ -463,4 +573,11 @@ mlflow/                     MLflow output, gitignored
 
 ## Not built yet
 
-CI/CD.
+- **Scheduled retraining.** Training is still triggered by hand. There is no job that
+  refits on new data and opens a pull request with the new numbers.
+- **Automated drift checks.** `notebooks/04_monitoring.ipynb` is run manually against a
+  simulated production sample. Nothing watches real traffic or raises an alert.
+- **Rollback.** Container Apps keeps old revisions, so rolling back is possible from
+  the portal, but no workflow does it automatically when a deploy goes bad.
+- **Authentication on the API.** `/predict` is open to anyone with the URL. Fine for a
+  portfolio, not for anything real.
