@@ -72,7 +72,7 @@ A `POST /predict` carrying
 6. **`self.predict(frame)`** (`steps/predict.py:61`) calls the fitted sklearn
    `Pipeline`, which applies whatever preprocessing that particular model needed.
 7. **`np.expm1(predicted)`** (`steps/predict.py:72`) undoes the log transform.
-   **This is the only place in the codebase where it is undone.**
+   **These are the only two lines in `steps/` that touch the transform** (the other is `steps/train.py:217`). The tests use both again as fixtures.
 8. Back in `app.py:110`, rounded to 2 decimal places and wrapped in a `Prediction`
    response model.
 
@@ -108,7 +108,7 @@ in the module docstring (`app.py:1-12`).
 8. `feature_target_separator`, then `train_test_split_data` — 80/20
    (`config.yml:14`), target still in dollars.
 9. **`train_model()`** (`steps/train.py:198`). `np.log1p(y_train)` is applied at
-   `steps/train.py:217`. **This is the only place the log transform is applied.**
+   `steps/train.py:217`. **This is the only place in `steps/` where it is applied.** `tests/` applies it again in fixtures.
 10. **`save_model()`** (`steps/train.py:257`) writes the bundle — see section 5.
 11. **`Predictor()`** loads that bundle straight back off disk and scores both splits.
     Every metric comes back in dollars because `expm1` runs first.
@@ -295,6 +295,6 @@ suite that simply cannot run on a fresh clone.
 Notebook 02's cleaning subsections map one-to-one onto `steps/clean.py` methods, in
 the same order — stated at `steps/clean.py:1-10`.
 
-Notebook 03 section 4.3 is the origin of `use_log_target` (`config.yml:16-19` cites
+Notebook 03 section 4.3 is the origin of `use_log_target` (`config.yml:15-18` cites
 "notebook 03 section 4.3"), and section 4.12.2 is the origin of the linear model's
 `degree: 2` (`config.yml:105-107`).
