@@ -128,7 +128,7 @@ in the module docstring (`app.py:1-12`).
 model, model_name, use_log_target, target, feature_order, categorical_features
 ```
 
-`Predictor.__init__` unpacks all six (`steps/predict.py:31-36`).
+`Predictor.__init__` unpacks **five** of them (`steps/predict.py:32-36`). `target` is written at `steps/train.py:283` and never read back - nothing in `steps/`, `app.py` or `tests/` reads `artefact["target"]`.
 
 **Why this matters more than anything else in the repo:** the model is fitted on
 `log1p(charges)`. Anyone who loads the pickle and calls `.predict()` without knowing
