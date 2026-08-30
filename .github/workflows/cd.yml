@@ -1,0 +1,128 @@
+# Build the image, prove the model still works, ship it to Azure Container Apps.
+#
+# There are no secrets in this workflow. `azure/login` trades a short-lived
+# token that GitHub signs for an Azure access token, and the trust is pinned to
+# this repo and this branch by a federated credential in Entra ID. The three
+# `vars` below are identifiers, not passwords.
+#
+# DVC needs no credential either: .dvc/config carries only `account_name`, and
+# the connection string lives in .dvc/config.local, which git ignores. With no
+# explicit credential DVC falls back to DefaultAzureCredential, which picks up
+# the `az login` that azure/login just performed.
+
+name: CD
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # required to request the OIDC token
+  contents: read
+
+# Never cancel a half-finished deploy - a cancelled `containerapp update` can
+# leave the app pointing at an image that was never pushed.
+concurrency:
+  group: cd-master
+  cancel-in-progress: false
+
+env:
+  REGISTRY: insurancemlops.azurecr.io
+  IMAGE: insurance-api
+  RESOURCE_GROUP: rg-insurance-mlops
+  CONTAINER_APP: insurance-premium-api
+
+jobs:
+  deploy:
+    name: Build, test and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Log in to Azure
+        uses: azure/login@v3
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.0.1
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      # models/ and data/ are git-ignored. Without this the image cannot build
+      # and the golden test below has nothing to score.
+      - name: Fetch the model and data from DVC
+        run: uv run dvc pull
+
+      - name: Test
+        run: uv run pytest
+
+      # The guard that makes this a model pipeline rather than a deploy script:
+      # recompute RMSE against the real data and refuse to ship if it moved.
+      - name: Check the model still scores what the README claims
+        run: uv run pytest -m slow
+
+      - name: Log in to the registry
+        run: az acr login --name insurancemlops
+
+      # Tagged with the commit sha so every running revision maps to exactly one
+      # commit. `latest` is a convenience for humans pulling by hand.
+      - name: Build and push
+        run: |
+          docker build \
+            -t $REGISTRY/$IMAGE:${{ github.sha }} \
+            -t $REGISTRY/$IMAGE:latest \
+            .
+          docker push $REGISTRY/$IMAGE:${{ github.sha }}
+          docker push $REGISTRY/$IMAGE:latest
+
+      - name: Point the app at the new image
+        run: |
+          az containerapp update \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP \
+            --image $REGISTRY/$IMAGE:${{ github.sha }}
+
+      # A deploy that reports success while the app returns 502 is worse than a
+      # failed one, so ask the live URL for a real prediction before going green.
+      - name: Smoke test the deployed app
+        run: |
+          FQDN=$(az containerapp show \
+            --name $CONTAINER_APP \
+            --resource-group $RESOURCE_GROUP \
+            --query properties.configuration.ingress.fqdn -o tsv)
+          echo "Testing https://$FQDN"
+
+          code=000
+          for attempt in $(seq 1 10); do
+            code=$(curl -s -m 60 -o /dev/null -w "%{http_code}" "https://$FQDN/" || true)
+            echo "attempt $attempt: HTTP $code"
+            [ "$code" = "200" ] && break
+            sleep 15
+          done
+          [ "$code" = "200" ] || { echo "::error::the app never returned 200"; exit 1; }
+
+          premium=$(curl -s -m 60 -X POST "https://$FQDN/predict" \
+            -H "Content-Type: application/json" \
+            -d '{"age":19,"sex":"female","bmi":27.9,"children":0,"smoker":"yes","region":"southwest"}' \
+            | python -c "import sys, json; print(json.load(sys.stdin)['predicted_premium'])")
+
+          # log1p dollars would come back around 9.8 rather than five figures
+          ok=$(python -c "p=float('$premium'); print(1 if 1000 < p < 200000 else 0)")
+          [ "$ok" = "1" ] || { echo "::error::$premium is not dollars - has the expm1 been lost?"; exit 1; }
+          echo "predicted premium $premium - looks like dollars"
+
+          {
+            echo "### Deployed :rocket:"
+            echo ""
+            echo "https://$FQDN/docs"
+            echo ""
+            echo "Sample prediction: **\$$premium**"
+          } >> $GITHUB_STEP_SUMMARY
