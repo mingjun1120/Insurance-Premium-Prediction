@@ -63,8 +63,8 @@ sequenceDiagram
     Pred->>Pipe: model.predict(frame) · predict.py 71
     Pipe-->>Pred: 9.7 — log space
     Pred->>Pred: np.expm1 · predict.py 72<br/>the only place the transform is undone
-    Pred-->>API: 16797.34 — dollars
-    API-->>Client: 200 — predicted_premium 16797.34, USD,<br/>model read from the bundle
+    Pred-->>API: 18095.88 — dollars
+    API-->>Client: 200 — predicted_premium 18095.88, USD,<br/>model read from the bundle
 ```
 
 Three things the picture is making an argument about:
