@@ -41,7 +41,9 @@ jobs:
       - name: Lint
         run: uv run ruff check .
 
-      # -v so the skipped tests, and the reason each one skipped, are visible
-      # in the log rather than hidden behind a count.
+      # -v names every test in the log; -rs adds the reason each skipped one
+      # skipped. -v alone reports a bare "SKIPPED" and hides the reason, which
+      # is the part that matters here - a skip means models/ or data/ was
+      # missing, not that the test is broken.
       - name: Test
-        run: uv run pytest -v
+        run: uv run pytest -v -rs
