@@ -1,0 +1,17 @@
+flowchart TD
+    PULL[DVC pull] --> TEST[Run fast tests]
+    TEST --> CHANGE[Change code or config]
+    CHANGE --> TRAIN[Train and log to MLflow]
+    TRAIN --> VERIFY[Run slow golden test]
+    VERIFY --> PUSH[DVC add and push]
+    PUSH --> REVIEW[Review MLflow and drift]
+    REVIEW -. next change .-> CHANGE
+
+    classDef prepare fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef action fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef gate fill:#fee2e2,stroke:#b91c1c,color:#111827
+    classDef result fill:#dcfce7,stroke:#15803d,color:#111827
+    class PULL prepare
+    class TEST,CHANGE,TRAIN,PUSH action
+    class VERIFY gate
+    class REVIEW result

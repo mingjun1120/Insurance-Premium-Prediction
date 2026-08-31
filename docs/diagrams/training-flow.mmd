@@ -1,0 +1,16 @@
+flowchart LR
+    CMD([uv run python main.py]) --> CFG[Read config.yml]
+    CFG --> LOAD[Load CSV]
+    LOAD --> CLEAN[Run 7 cleaning rules]
+    CLEAN --> SPLIT[Make 80/20 split]
+    SPLIT --> FIT[Fit selected model]
+    FIT --> SAVE[(Save model bundle)]
+    FIT --> SCORE[Score in dollars]
+    SCORE -.-> MLFLOW[(Log MLflow run)]
+
+    classDef start fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef process fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef output fill:#dcfce7,stroke:#15803d,color:#111827
+    class CMD start
+    class CFG,LOAD,CLEAN,SPLIT,FIT,SCORE process
+    class SAVE,MLFLOW output

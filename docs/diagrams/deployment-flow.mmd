@@ -1,0 +1,18 @@
+flowchart LR
+    PUSH([Push to master]) --> AUTH[OIDC login]
+    AUTH --> PULL[DVC pull]
+    PULL --> TEST[Fast + slow tests]
+    TEST --> BUILD[Build Docker image]
+    BUILD --> ACR[(Push image to ACR)]
+    ACR --> DEPLOY[Update Container App]
+    DEPLOY --> SMOKE[Health + prediction checks]
+    SMOKE --> DONE([Write deploy summary])
+
+    classDef start fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef action fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef gate fill:#fee2e2,stroke:#b91c1c,color:#111827
+    classDef result fill:#dcfce7,stroke:#15803d,color:#111827
+    class PUSH start
+    class AUTH,PULL,BUILD,ACR,DEPLOY action
+    class TEST,SMOKE gate
+    class DONE result

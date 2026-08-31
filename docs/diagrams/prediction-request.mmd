@@ -1,0 +1,22 @@
+sequenceDiagram
+    autonumber
+    actor Caller
+    participant API as FastAPI app.py
+    participant Schema as Person schema
+    participant Predictor as steps.predict
+    participant Bundle as model.pkl
+
+    Note over API,Bundle: The bundle is loaded once when the API starts.
+    Caller->>API: POST /predict with 6 fields
+    API->>Schema: Validate values and ranges
+    alt Invalid input
+        Schema-->>Caller: 422 with a reason
+    else Valid input
+        API->>Predictor: predict_records(person)
+        Predictor->>Bundle: Read column order and flags
+        Predictor->>Predictor: Build typed DataFrame
+        Predictor->>Bundle: model.predict(frame)
+        Bundle-->>Predictor: Value in model space
+        Predictor->>Predictor: expm1 if log target
+        Predictor-->>Caller: Premium in USD + model name
+    end

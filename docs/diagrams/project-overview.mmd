@@ -1,0 +1,15 @@
+flowchart LR
+    DATA[(Insurance data)] --> TRAIN[Clean and train]
+    TRAIN --> BUNDLE[(Model bundle)]
+    BUNDLE --> API[FastAPI]
+    API --> IMAGE[Docker image]
+    IMAGE --> AZURE[Azure Container Apps]
+    USER([Caller]) -->|JSON| AZURE
+    TRAIN -. metrics .-> MLFLOW[(MLflow)]
+
+    classDef input fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef process fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef output fill:#dcfce7,stroke:#15803d,color:#111827
+    class DATA,USER input
+    class TRAIN,API,IMAGE process
+    class BUNDLE,AZURE,MLFLOW output
