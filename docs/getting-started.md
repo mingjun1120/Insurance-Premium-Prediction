@@ -1,5 +1,9 @@
 # Getting started
 
+`Guide 1 of 5` · **Getting started** → [Architecture](architecture.md) →
+[Model development](model-development.md) → [Operations](operations.md) →
+[Deployment](deployment.md)
+
 Use this page when you want one working prediction with the existing repository.
 You do not need to read the notebooks first.
 
@@ -140,5 +144,5 @@ uv run pytest -m slow
 uv run jupyter lab
 ```
 
-Next: [understand the system](architecture.md), [change the
-model](model-development.md), or use the [command reference](reference.md).
+Next: [Architecture](architecture.md) - how the training run, the prediction
+request, and the storage tools connect.

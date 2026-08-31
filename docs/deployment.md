@@ -1,5 +1,9 @@
 # Deployment
 
+`Guide 5 of 5` · [Getting started](getting-started.md) →
+[Architecture](architecture.md) → [Model development](model-development.md) →
+[Operations](operations.md) → **Deployment**
+
 The model is served by FastAPI, packaged with Docker, and deployed by GitHub
 Actions to Azure Container Apps.
 
@@ -143,5 +147,5 @@ Before rollback, record:
 - whether DVC pointers changed;
 - whether the API or the model-quality gate failed.
 
-Next: [architecture](architecture.md), [operations](operations.md), or the
-[workflow and command reference](reference.md).
+That is the end of the path. For any command, config key, API field, or file,
+use the [Reference](reference.md).

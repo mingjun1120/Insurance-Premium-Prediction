@@ -1,5 +1,7 @@
 # Reference
 
+`Look-up page` · Not one of the five guides in the reading path.
+
 Use this page to look up a command, file, field, or configuration value. For a
 first run, use [Getting started](getting-started.md).
 

@@ -1,5 +1,9 @@
 # Operations
 
+`Guide 4 of 5` · [Getting started](getting-started.md) →
+[Architecture](architecture.md) → [Model development](model-development.md) →
+**Operations** → [Deployment](deployment.md)
+
 This page is the short runbook for tests, DVC, MLflow, and drift checks.
 
 ![Local operations loop](diagrams/operations-loop.svg)
@@ -144,5 +148,4 @@ column flags.
 - A model is promoted by updating DVC pointers and deploying code.
 - Rollback is available in Azure Container Apps but not scripted.
 
-Next: [deployment](deployment.md) or the [full command
-reference](reference.md).
+Next: [Deployment](deployment.md) - package the model and ship it to Azure.

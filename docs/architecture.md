@@ -1,5 +1,9 @@
 # Architecture
 
+`Guide 2 of 5` · [Getting started](getting-started.md) → **Architecture** →
+[Model development](model-development.md) → [Operations](operations.md) →
+[Deployment](deployment.md)
+
 This page explains how data becomes a prediction. The current code is the
 source of truth; the project was inspired by
 [`prsdm/mlops-project`](https://github.com/prsdm/mlops-project) and an earlier
@@ -107,5 +111,5 @@ with this Git commit?” MLflow answers “what happened during this training ru
 | Rollback | Possible with old Container Apps revisions, but not automated. |
 | API access control | Not implemented; suitable for a portfolio demo only. |
 
-Next: [model development](model-development.md), [operations](operations.md),
-or [deployment](deployment.md).
+Next: [Model development](model-development.md) - the notebooks, cleaning rules,
+and model comparison behind these two traces.

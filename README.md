@@ -100,17 +100,19 @@ back to US dollars.
 
 ## Documentation
 
-There is one starting point and six short guides. There are no nested
-`index.md` pages.
+Read the five guides in order. Each one assumes the one before it, and every
+page repeats this path at the top so you always know where you are.
 
-| Read this | When you want to... |
-| --- | --- |
-| [Getting started](docs/getting-started.md) | Install, restore files, and get one prediction. |
-| [Architecture](docs/architecture.md) | See how training, prediction, and storage connect. |
-| [Model development](docs/model-development.md) | Understand notebooks, cleaning, models, and results. |
-| [Operations](docs/operations.md) | Run tests, DVC, MLflow, and drift checks. |
-| [Deployment](docs/deployment.md) | Build the image and understand CI/CD to Azure. |
-| [Reference](docs/reference.md) | Look up commands, config, API fields, and files. |
+| # | Read this | When you want to... |
+| --- | --- | --- |
+| 1 | [Getting started](docs/getting-started.md) | Install, restore files, and get one prediction. |
+| 2 | [Architecture](docs/architecture.md) | See how training, prediction, and storage connect. |
+| 3 | [Model development](docs/model-development.md) | Understand notebooks, cleaning, models, and results. |
+| 4 | [Operations](docs/operations.md) | Run tests, DVC, MLflow, and drift checks. |
+| 5 | [Deployment](docs/deployment.md) | Build the image and understand CI/CD to Azure. |
+| - | [Reference](docs/reference.md) | Look up commands, config, API fields, and files. Not a step - open it any time. |
+
+About an hour end to end. Guide 1 alone gets you a working prediction.
 
 The architecture page includes a source-linked interactive system map and a
 smaller request sequence diagram.

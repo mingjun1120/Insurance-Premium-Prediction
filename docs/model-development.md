@@ -1,5 +1,9 @@
 # Model development
 
+`Guide 3 of 5` · [Getting started](getting-started.md) →
+[Architecture](architecture.md) → **Model development** →
+[Operations](operations.md) → [Deployment](deployment.md)
+
 Use this page when you want to understand the data science, compare models, or
 retrain the saved bundle.
 
@@ -158,5 +162,5 @@ Check all of the following:
 - the chosen model library remains in the serving dependencies;
 - `config.yml`, `models.dvc`, and the MLflow run tell the same story.
 
-Next: [operate the artefacts](operations.md) or [serve and deploy the
-model](deployment.md).
+Next: [Operations](operations.md) - test, version, track, and monitor the model
+you just trained.
