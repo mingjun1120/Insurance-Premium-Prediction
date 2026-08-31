@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Insurance Premium Prediction - System Map",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1360,
+      860
+    ],
+    "views": [
+      {
+        "id": "training",
+        "label": "Training path",
+        "focus": [
+          "nb01",
+          "data",
+          "pipeline",
+          "bundle",
+          "mlflow"
+        ],
+        "note": "Kaggle CSV to a fitted model bundle, with every run recorded."
+      },
+      {
+        "id": "delivery",
+        "label": "Delivery and the gate",
+        "focus": [
+          "dvc",
+          "gha",
+          "gate",
+          "acr",
+          "live"
+        ],
+        "note": "A push to master only ships if the model still scores what it should."
+      },
+      {
+        "id": "monitoring",
+        "label": "Drift check",
+        "focus": [
+          "data",
+          "bundle",
+          "nb04"
+        ],
+        "note": "The notebook reads the data and the model, then writes two HTML reports."
+      }
+    ],
+    "repository": {
+      "url": "https://github.com/mingjun1120/Insurance-Premium-Prediction",
+      "revision": "04b36340aa087ce90cabe1f4cea278782be7fcd9"
+    }
+  },
+  "components": [
+    {
+      "id": "nb01",
+      "type": "backend",
+      "label": "Notebook 01",
+      "sublabel": "Kaggle CSV to merged_data",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "notebooks/01_load_data.ipynb",
+          "label": "load and merge"
+        }
+      ]
+    },
+    {
+      "id": "data",
+      "type": "database",
+      "label": "Insurance data",
+      "sublabel": "data/merged_data.csv",
+      "pos": [
+        320,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "config.yml",
+          "line": 9,
+          "label": "data_path"
+        }
+      ]
+    },
+    {
+      "id": "pipeline",
+      "type": "backend",
+      "label": "Training pipeline",
+      "sublabel": "ingest, clean, train",
+      "pos": [
+        600,
+        300
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "main.py",
+          "line": 50,
+          "label": "run_pipeline()"
+        }
+      ]
+    },
+    {
+      "id": "bundle",
+      "type": "database",
+      "label": "Model bundle",
+      "sublabel": "models/model.pkl",
+      "pos": [
+        890,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "steps/train.py",
+          "line": 257,
+          "label": "save_model()"
+        }
+      ]
+    },
+    {
+      "id": "mlflow",
+      "type": "database",
+      "label": "MLflow",
+      "sublabel": "runs, metrics, artefacts",
+      "pos": [
+        600,
+        490
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "main.py",
+          "line": 101,
+          "label": "train_with_mlflow()"
+        }
+      ]
+    },
+    {
+      "id": "nb04",
+      "type": "backend",
+      "label": "Drift check",
+      "sublabel": "reads data and model.pkl",
+      "pos": [
+        320,
+        100
+      ],
+      "size": [
+        180,
+        64
+      ],
+      "sources": [
+        {
+          "path": "notebooks/04_monitoring.ipynb",
+          "label": "reads data and model"
+        }
+      ],
+      "tag": "writes reports/*.html"
+    },
+    {
+      "id": "dvc",
+      "type": "cloud",
+      "label": "DVC remote",
+      "sublabel": "Azure Blob Storage",
+      "pos": [
+        1140,
+        570
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".dvc/config",
+          "line": 4,
+          "label": "azure://dvcstore"
+        }
+      ]
+    },
+    {
+      "id": "gha",
+      "type": "security",
+      "label": "GitHub Actions",
+      "sublabel": "push to master",
+      "tag": "OIDC login, then dvc pull",
+      "pos": [
+        40,
+        720
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".github/workflows/cd.yml",
+          "line": 44,
+          "label": "Log in to Azure"
+        }
+      ]
+    },
+    {
+      "id": "gate",
+      "type": "security",
+      "label": "Deploy gate",
+      "sublabel": "tests, then golden check",
+      "tag": "fail = nothing ships",
+      "pos": [
+        315,
+        720
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".github/workflows/cd.yml",
+          "line": 64,
+          "end_line": 71,
+          "label": "Test, then model check"
+        }
+      ]
+    },
+    {
+      "id": "acr",
+      "type": "cloud",
+      "label": "Container registry",
+      "sublabel": "Azure ACR",
+      "pos": [
+        590,
+        720
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".github/workflows/cd.yml",
+          "line": 77,
+          "end_line": 84,
+          "label": "Build and push"
+        }
+      ]
+    },
+    {
+      "id": "live",
+      "type": "cloud",
+      "label": "Live API",
+      "sublabel": "Azure Container Apps",
+      "pos": [
+        865,
+        720
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": ".github/workflows/cd.yml",
+          "line": 86,
+          "label": "Point app at new image"
+        }
+      ]
+    },
+    {
+      "id": "caller",
+      "type": "external",
+      "label": "API caller",
+      "sublabel": "JSON over HTTPS",
+      "pos": [
+        1140,
+        720
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "sources": [
+        {
+          "path": "app.py",
+          "line": 90,
+          "label": "POST /predict"
+        }
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "1 - Training",
+      "wraps": [
+        "nb01",
+        "data",
+        "pipeline",
+        "bundle",
+        "mlflow"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "2 - Monitoring",
+      "wraps": [
+        "nb04"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "3 - Deployment",
+      "wraps": [
+        "gha",
+        "gate",
+        "acr",
+        "live"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "nb01-writes",
+      "from": "nb01",
+      "to": "data",
+      "label": "writes CSV",
+      "variant": "emphasis"
+    },
+    {
+      "id": "read-csv",
+      "from": "data",
+      "to": "pipeline",
+      "label": "read CSV",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save-bundle",
+      "from": "pipeline",
+      "to": "bundle",
+      "label": "save fitted model",
+      "variant": "emphasis"
+    },
+    {
+      "id": "log-run",
+      "from": "pipeline",
+      "to": "mlflow",
+      "label": "log run",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 62
+    },
+    {
+      "id": "drift-ref",
+      "from": "data",
+      "to": "nb04",
+      "label": "reference data",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "dvc-bundle",
+      "from": "dvc",
+      "to": "bundle",
+      "label": "pull / push",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom",
+      "via": [
+        [
+          1210,
+          430
+        ],
+        [
+          965,
+          430
+        ]
+      ]
+    },
+    {
+      "id": "dvc-data",
+      "from": "dvc",
+      "to": "data",
+      "label": "pull / push",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "bottom",
+      "via": [
+        [
+          395,
+          602
+        ]
+      ]
+    },
+    {
+      "id": "gha-gate",
+      "from": "gha",
+      "to": "gate",
+      "label": "run checks",
+      "variant": "security"
+    },
+    {
+      "id": "gate-acr",
+      "from": "gate",
+      "to": "acr",
+      "label": "pass: build and push",
+      "variant": "emphasis"
+    },
+    {
+      "id": "acr-live",
+      "from": "acr",
+      "to": "live",
+      "label": "deploy image by SHA",
+      "variant": "emphasis"
+    },
+    {
+      "id": "caller-live",
+      "from": "caller",
+      "to": "live",
+      "label": "POST /predict",
+      "fromSide": "left",
+      "toSide": "right"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Train",
+      "items": [
+        "Notebook 01 writes data/merged_data.csv",
+        "One command runs ingest, clean and train",
+        "MLflow records parameters and metrics"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Ship",
+      "items": [
+        "Tests and the golden check run before the build",
+        "GitHub Actions builds and pushes the image",
+        "A model that scores worse blocks the deploy"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Operate",
+      "items": [
+        "DVC pulls and pushes data and models",
+        "Drift is checked by hand against a simulated sample"
+      ]
+    }
+  ]
+}

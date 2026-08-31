@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="generator" content="archify 2.16.0-dev.0">
-  <title>Insurance Premium Prediction — System Map Diagram</title>
+  <title>Insurance Premium Prediction - System Map Diagram</title>
   <script>
     // Resolve the theme before first paint so light-preference users don't
     // see a dark flash. The toolbar script below re-applies with UI state.
@@ -4955,12 +4955,12 @@
            data-preset-badge-blueprint="BLUEPRINT / REV 01"
            data-preset-badge-editorial="EDITORIAL / FIELD NOTE">
         <div class="pulse-dot"></div>
-        <h1>Insurance Premium Prediction — System Map</h1>
+        <h1>Insurance Premium Prediction - System Map</h1>
       </div>
     </div>
 
-    <script id="archify-guided-views-data" type="application/json">[]</script>
-    <script id="archify-source-evidence-data" type="application/json">{"schemaVersion":1,"verified":true,"repository":{"url":"https://github.com/mingjun1120/Insurance-Premium-Prediction","revision":"3af434a0b197f4c31745122c0b82bced1352578e","shortRevision":"3af434a"},"referenceCount":12,"nodes":{"data":[{"path":"config.yml","line":9,"label":"pipeline input","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/config.yml#L9"}],"pipeline":[{"path":"main.py","line":50,"label":"run_pipeline","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/main.py#L50"}],"bundle":[{"path":"steps/train.py","line":257,"label":"save_model","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/steps/train.py#L257"}],"api":[{"path":"app.py","line":27,"label":"load predictor","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/app.py#L27"},{"path":"app.py","line":95,"label":"POST /predict","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/app.py#L95"}],"registry":[{"path":".github/workflows/cd.yml","line":42,"label":"registry name","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/.github/workflows/cd.yml#L42"}],"containerApp":[{"path":".github/workflows/cd.yml","line":95,"label":"deploy image","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/.github/workflows/cd.yml#L95"}],"caller":[{"path":"samples.json","line":1,"label":"sample inputs","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/samples.json#L1"}],"mlflow":[{"path":"main.py","line":101,"label":"tracked training","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/main.py#L101"}],"dvc":[{"path":".dvc/config","line":1,"label":"remote config","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/.dvc/config#L1"}],"actions":[{"path":".github/workflows/cd.yml","line":1,"label":"CD workflow","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/.github/workflows/cd.yml#L1"}],"drift":[{"path":"notebooks/04_monitoring.ipynb","label":"monitoring demo","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/3af434a0b197f4c31745122c0b82bced1352578e/notebooks/04_monitoring.ipynb"}]}}</script>
+    <script id="archify-guided-views-data" type="application/json">[{"id":"training","label":"Training path","focus":["nb01","data","pipeline","bundle","mlflow"],"note":"Kaggle CSV to a fitted model bundle, with every run recorded."},{"id":"delivery","label":"Delivery and the gate","focus":["dvc","gha","gate","acr","live"],"note":"A push to master only ships if the model still scores what it should."},{"id":"monitoring","label":"Drift check","focus":["data","bundle","nb04"],"note":"The notebook reads the data and the model, then writes two HTML reports."}]</script>
+    <script id="archify-source-evidence-data" type="application/json">{"schemaVersion":1,"verified":true,"repository":{"url":"https://github.com/mingjun1120/Insurance-Premium-Prediction","revision":"04b36340aa087ce90cabe1f4cea278782be7fcd9","shortRevision":"04b3634"},"referenceCount":12,"nodes":{"nb01":[{"path":"notebooks/01_load_data.ipynb","label":"load and merge","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/notebooks/01_load_data.ipynb"}],"data":[{"path":"config.yml","line":9,"label":"data_path","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/config.yml#L9"}],"pipeline":[{"path":"main.py","line":50,"label":"run_pipeline()","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/main.py#L50"}],"bundle":[{"path":"steps/train.py","line":257,"label":"save_model()","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/steps/train.py#L257"}],"mlflow":[{"path":"main.py","line":101,"label":"train_with_mlflow()","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/main.py#L101"}],"nb04":[{"path":"notebooks/04_monitoring.ipynb","label":"reads data and model","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/notebooks/04_monitoring.ipynb"}],"dvc":[{"path":".dvc/config","line":4,"label":"azure://dvcstore","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/.dvc/config#L4"}],"gha":[{"path":".github/workflows/cd.yml","line":44,"label":"Log in to Azure","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/.github/workflows/cd.yml#L44"}],"gate":[{"path":".github/workflows/cd.yml","line":64,"endLine":71,"label":"Test, then model check","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/.github/workflows/cd.yml#L64-L71"}],"acr":[{"path":".github/workflows/cd.yml","line":77,"endLine":84,"label":"Build and push","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/.github/workflows/cd.yml#L77-L84"}],"live":[{"path":".github/workflows/cd.yml","line":86,"label":"Point app at new image","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/.github/workflows/cd.yml#L86"}],"caller":[{"path":"app.py","line":90,"label":"POST /predict","href":"https://github.com/mingjun1120/Insurance-Premium-Prediction/blob/04b36340aa087ce90cabe1f4cea278782be7fcd9/app.py#L90"}]}}</script>
     <script id="archify-i18n-data" type="application/json">{"locale":"en","messages":{"viewer.kind.frontend":"Frontend","viewer.kind.backend":"Backend","viewer.kind.database":"Database","viewer.kind.cloud":"Cloud","viewer.kind.security":"Security","viewer.kind.messagebus":"Message bus","viewer.kind.external":"External","viewer.kind.neutral":"Neutral","viewer.kind.node":"Node","viewer.kind.start":"Start","viewer.kind.active":"Active","viewer.kind.waiting":"Waiting","viewer.kind.decision":"Decision","viewer.kind.success":"Success","viewer.kind.failure":"Failure","viewer.toolbar.actions":"Diagram actions","viewer.theme.toggle.title":"Toggle theme (T)","viewer.theme.toggle":"Toggle color theme","viewer.theme.dark":"Dark","viewer.theme.light":"Light","viewer.preset.choose.title":"Choose visual style (S cycles)","viewer.preset.choose":"Choose visual style","viewer.preset.style":"Style","viewer.preset.menu":"Visual style","viewer.preset.identity":"Visual identity","viewer.preset.cycles":"S cycles","viewer.preset.classic":"Classic","viewer.preset.classic.short":"Classic","viewer.preset.classic.hint":"Stable technical default","viewer.preset.flow":"Signal Flow","viewer.preset.flow.short":"Flow","viewer.preset.flow.hint":"Motion-forward presentation","viewer.preset.blueprint":"Blueprint","viewer.preset.blueprint.hint":"Engineering review","viewer.preset.editorial":"Editorial","viewer.preset.editorial.hint":"Publication and launch notes","viewer.preset.badge.signalFlow":"SIGNAL FLOW","viewer.preset.badge.blueprint":"BLUEPRINT / REV 01","viewer.preset.badge.editorial":"EDITORIAL / FIELD NOTE","viewer.preset.badge.editorialPlate":"ARCHIFY / PLATE 04","viewer.preset.current":"Visual style: {style}. Choose visual style","viewer.motion.live":"Live","viewer.motion.still":"Still","viewer.motion.pause":"Pause motion","viewer.motion.resume":"Resume motion","viewer.motion.reduced":"Motion paused by reduced-motion preference","viewer.motion.hidden":"Motion paused while this page is hidden","viewer.motion.yielding":"Pause motion; currently yielding to {owner}","viewer.motion.yielding.title":"Live preview enabled · yielding to {owner}","viewer.owner.story":"the guided story","viewer.owner.chapter":"the active chapter","viewer.owner.chapterPreview":"the chapter delta preview","viewer.owner.handoff":"the chapter handoff","viewer.owner.route":"Route Probe","viewer.owner.lens":"Semantic Lens","viewer.owner.relationship":"Relationship Preview","viewer.owner.intent":"Intent Trace","viewer.owner.focus":"semantic focus","viewer.owner.legend":"legend preview","viewer.owner.reader":"reader interaction","viewer.present.enter":"Enter presentation stage","viewer.present.enter.title":"Presentation stage (F)","viewer.present.exit":"Exit presentation stage","viewer.present.exit.title":"Exit presentation stage (F or Escape)","viewer.present.present":"Present","viewer.present.exit.label":"Exit","viewer.export.button":"Export","viewer.export.button.title":"Export diagram (E)","viewer.export.diagram":"Export diagram","viewer.export.menu":"Export","viewer.export.subtitle":"Portable, clean outputs","viewer.export.share":"Share","viewer.export.shareCard":"Share Card","viewer.export.routeShareCard":"Route Share Card","viewer.export.reachShareCard":"Reach Share Card","viewer.export.copyShareCard":"Copy Share Card","viewer.export.copyDiagram":"Copy diagram","viewer.export.clipboardPng":"PNG to clipboard","viewer.export.raster":"Raster images","viewer.export.image":"Image","viewer.export.lossless":"Lossless image","viewer.export.compact":"Compact image","viewer.export.modern":"Modern image","viewer.export.vectorMotion":"Vector and motion","viewer.export.vectorMotion.heading":"Vector \u0026 motion","viewer.export.editable":"Editable vector","viewer.export.motion6s":"6s motion","viewer.export.unsupported":"Not supported by this browser","viewer.export.clipboardUnsupported":"Clipboard image write not supported by this browser","viewer.export.clipboardUnsupported.period":"Clipboard image write not supported by this browser.","viewer.export.clipboardUnsupported.short":"Clipboard image write not supported in this browser.","viewer.export.motionUnavailable":"Motion capture unavailable in this browser","viewer.export.webmUnavailable":"WebM unavailable in this browser","viewer.export.failed":"Export failed: {message}","viewer.export.unknownVariant":"Unknown Share Card variant: {variant}","viewer.export.routeRequired":"Trace a route before exporting a Route Share Card","viewer.export.reachRequired":"Trace authored reach before exporting a Reach Share Card","viewer.export.unknown":"unknown","viewer.export.routeFailed":"Route Share Card export failed: {message}","viewer.export.reachFailed":"Reach Share Card export failed: {message}","viewer.export.copyFailed":"Copy failed: {message}","viewer.export.copiedPng":"Copied PNG to clipboard","viewer.export.copiedShare":"Copied Share Card","viewer.export.downloadedShare":"Downloaded Share Card","viewer.export.downloadedRoute":"Downloaded Route Share Card","viewer.export.downloadedReach":"Downloaded Reach Share Card","viewer.export.downloadedWebm":"Downloaded WebM","viewer.export.recording":"Recording 6 seconds of motion…","viewer.export.card.routeSummary.one":"Route: {source} → {target} · {count} directed hop","viewer.export.card.routeSummary.other":"Route: {source} → {target} · {count} directed hops","viewer.export.card.reachSummary":"Authored {direction} from {origin} · {nodes} · {links} · max {hops}","viewer.export.card.node.one":"{count} node","viewer.export.card.node.other":"{count} nodes","viewer.export.card.link.one":"{count} link","viewer.export.card.link.other":"{count} links","viewer.export.card.hop.one":"{count} hop","viewer.export.card.hop.other":"{count} hops","viewer.export.card.routeBadge":"ARCHIFY · ROUTE · {hops}","viewer.export.card.reachBadge":"ARCHIFY · {direction} REACH","viewer.export.card.defaultBadge":"ARCHIFY · {preset} · {theme}","viewer.export.direction.upstream":"Upstream","viewer.export.direction.downstream":"Downstream","viewer.export.error.canvasUnavailable":"Canvas unavailable for {label}","viewer.export.error.contextUnavailable":"2D canvas context unavailable for {label}","viewer.export.error.toBlobUnavailable":"canvas.toBlob unavailable for {label}","viewer.export.error.toBlobNull":"canvas.toBlob returned no data for {label}","viewer.export.error.variantsCombined":"Share Card variants cannot be combined","viewer.export.error.viewerState":"Share Card export could not remove temporary viewer state","viewer.export.error.routeState":"Route Card export could not preserve the resolved route safely","viewer.export.error.reachState":"Reach Card export could not preserve authored reach safely","viewer.export.error.webmRequirements":"WebM motion export requires a trace animation and browser MediaRecorder support","viewer.export.error.mediaRecorder":"MediaRecorder failed","viewer.export.error.emptyWebm":"MediaRecorder produced an empty WebM","viewer.export.error.webmBackground":"SVG background could not be loaded for WebM export","viewer.guided.region":"Guided diagram views","viewer.guided.previous":"Previous guided view","viewer.guided.previous.title":"Previous guided view ([)","viewer.guided.next":"Next guided view","viewer.guided.next.title":"Next guided view (])","viewer.guided.views":"Guided views","viewer.guided.explore":"Explore this system","viewer.guided.intro":"Step through curated paths without changing the source diagram.","viewer.guided.trail":"Story trail","viewer.guided.beat":"Beat","viewer.guided.nextBeat":"Next","viewer.guided.play":"Play guided story","viewer.guided.play.title":"Play guided story (P)","viewer.guided.pause":"Pause guided story","viewer.guided.pause.title":"Pause guided story (P)","viewer.guided.replay":"Replay guided story","viewer.guided.replay.title":"Replay guided story (P)","viewer.guided.playStory":"Play story","viewer.guided.pauseStory":"Pause","viewer.guided.replayStory":"Replay story","viewer.guided.motionUnavailable":"Story playback unavailable while motion is Still","viewer.guided.enableMotion":"Switch motion to Live to play the guided story","viewer.guided.selectBeatLink":"Select a Story Beat to copy its exact link","viewer.guided.copyMoment":"Copy moment","viewer.guided.momentCopied":"Moment link copied","viewer.guided.momentCopyFailed":"Could not copy story moment link","viewer.guided.copied":"Copied","viewer.guided.copyFailed":"Copy failed","viewer.guided.showAll":"Show all","viewer.guided.showAll.aria":"Show entire diagram","viewer.guided.chapters":"Story chapters","viewer.guided.storyTrail":"Story trail for {label}: {count} beats","viewer.guided.chapter.open":"Open chapter {index} of {total}: {label}, {count} stops","viewer.guided.chapter.current":"Current chapter {index} of {total}: {label}, {count} stops","viewer.guided.chapter.selectedNodes":"{count} selected nodes","viewer.guided.chapter.stops":"{count} stops","viewer.guided.chapter.stop.one":"{count} stop","viewer.guided.chapter.stop.other":"{count} stops","viewer.guided.chapter.current.title":"{label} — current chapter, {count} stops","viewer.guided.chapter.delta.expanded":"{stay} stay, {enter} enter, {leave} leave","viewer.guided.chapter.delta.aria":"Open chapter {index} of {total}: {label}. Chapter focus delta: {delta}","viewer.guided.chapter.delta.title":"{label} — {delta} chapter focus","viewer.guided.handoff":"{from} → {to} · via {label}","viewer.guided.share.chapter":"Chapter {index} / {total}","viewer.guided.share.initial":"Chapter 01 / 01","viewer.guided.share.default":"Guided chapter","viewer.guided.state.ready":"Ready","viewer.guided.state.playing":"Playing","viewer.guided.state.settled":"Settled","viewer.guided.state.paused":"Paused","viewer.guided.state.pinned":"Pinned","viewer.guided.state.still":"Still","viewer.guided.share.step":"Step {index} / {total} · {label}","viewer.guided.share.staticMoment":"{step} · Static moment","viewer.guided.share.complete":"{count} steps complete · {note}","viewer.guided.share.settled":"Path settled for reading.","viewer.guided.share.staticPath":"{count} steps · Static path","viewer.guided.share.ready":"{count} steps · Ready","viewer.guided.share.aria":"{state} chapter {index} of {total}: {label}. {beat}. {route}","viewer.guided.beat.start":"Beat {index} / {total} · {label} · starting point","viewer.guided.beat.forward":"Beat {index} / {total} · {from} → {to}","viewer.guided.beat.reverse":"Beat {index} / {total} · {from} → {to} · reverse authored link","viewer.guided.beat.multiple":"Beat {index} / {total} · {from} ⇄ {to} · {count} authored links","viewer.guided.beat.group":"Beat {index} / {total} · {from} · {to} · grouped · no direct link","viewer.guided.beat.aria.prefix":"Story beat {index} of {total}: {label}. ","viewer.guided.beat.aria.start":"Starting point.","viewer.guided.beat.aria.forward":"From {from} through one authored forward relationship.","viewer.guided.beat.aria.reverse":"From {from}; the authored relationship points from {to} to {from}.","viewer.guided.beat.aria.multiple":"From {from} through {count} authored relationships; shown without arbitrary motion.","viewer.guided.beat.aria.group":"Grouped from {from} with no direct authored relationship.","viewer.guided.caption.start":"Starting point","viewer.guided.caption.grouped":"Grouped transition · no direct authored link","viewer.guided.caption.more":" +{count} more","viewer.guided.caption.reverse":"Reverse authored relationship","viewer.guided.caption.relationships":"{count} authored relationships","viewer.guided.caption.relationship":"Authored relationship","viewer.guided.caption.direction":"authored direction: {from} → {to}","viewer.guided.caption.starting":"Authored starting point","viewer.guided.beatLink":"Copy link to current story moment: Beat {index} of {total}: {label}","viewer.guided.noStory":"This diagram has no authored guided story.","viewer.guide.eyebrow":"Diagram guide","viewer.guide.close":"Close diagram guide","viewer.guide.inspecting":"Inspecting compiled semantics","viewer.guide.actions":"Diagram exploration actions","viewer.guide.find":"Find any node","viewer.guide.find.hint":"Search labels, responsibilities, kinds, and stable IDs.","viewer.guide.route":"Trace a route","viewer.guide.route.aria":"Trace a directed route","viewer.guide.route.hint":"Ask how two semantic nodes connect in authored direction.","viewer.guide.map":"See the whole system","viewer.guide.map.hint":"Open Semantic Radar with a live viewport and stable nodes.","viewer.guide.lens":"Compare semantic kinds","viewer.guide.lens.hint":"Count roles, reveal their traffic, and compare direct authored links.","viewer.guide.story":"Play the guided story","viewer.guide.story.hint":"Walk the authored chapters and real relationships.","viewer.guide.present":"Enter Presentation Stage","viewer.guide.present.hint":"Give the live diagram the viewport without changing export.","viewer.guide.shortcuts":"Additional keyboard shortcuts","viewer.guide.shortcut.export":"Export","viewer.guide.shortcut.theme":"Theme","viewer.guide.shortcut.style":"Style","viewer.guide.shortcut.reset":"Reset","viewer.guide.shortcut.zoomIn":"Zoom in","viewer.guide.shortcut.zoomOut":"Zoom out","viewer.guide.shortcut.close":"Close","viewer.guide.facts":"{nodes} · {relationships} · {views}","viewer.guide.fact.node.one":"{count} semantic node","viewer.guide.fact.node.other":"{count} semantic nodes","viewer.guide.fact.relationship.one":"{count} relationship","viewer.guide.fact.relationship.other":"{count} relationships","viewer.guide.fact.view.one":"{count} guided view","viewer.guide.fact.view.other":"{count} guided views","viewer.guide.story.available.one":"Walk {count} authored chapter and its real relationships.","viewer.guide.story.available.other":"Walk {count} authored chapters and their real relationships.","viewer.guide.story.unavailable":"No authored guided story in this diagram.","viewer.guide.open":"Open diagram guide","viewer.guide.noStory":"This diagram has no authored guided story.","viewer.finder.title":"Find a node","viewer.finder.close":"Close node finder","viewer.finder.placeholder":"Search labels or IDs","viewer.finder.search":"Search diagram nodes","viewer.finder.results":"Diagram nodes","viewer.finder.empty":"No matching nodes","viewer.finder.result.focus":"Focus {label}","viewer.finder.result.routeStart":"Choose {label} as route start","viewer.finder.result.routeTarget":"Choose {label} as route destination, {links}","viewer.finder.status.empty":"No matching nodes","viewer.finder.status.count.one":"{count} matching node","viewer.finder.status.count.other":"{count} matching nodes","viewer.finder.noun.nodes":"nodes","viewer.finder.link.one":"{count} link","viewer.finder.link.other":"{count} links","viewer.finder.result.focus.one":"Focus {label}, {count} related connection","viewer.finder.result.focus.other":"Focus {label}, {count} related connections","viewer.finder.status.filtered":"{visible} of {available} {noun}","viewer.finder.status.all":"{available} {noun}","viewer.passport.eyebrow":"Semantic passport","viewer.passport.metadata":"Node metadata","viewer.passport.evidence":"Verified source evidence","viewer.passport.verified":"Verified source","viewer.passport.reach":"Authored reach","viewer.passport.reach.trace":"Trace authored reachability","viewer.passport.upstream":"Upstream","viewer.passport.downstream":"Downstream","viewer.passport.upstream.trace":"Trace upstream authored reachability","viewer.passport.downstream.trace":"Trace downstream authored reachability","viewer.passport.close":"Close semantic passport","viewer.passport.copy":"Copy link","viewer.passport.copy.focus":"Copy link to focused node","viewer.passport.relations":"Relations","viewer.passport.relations.show":"Show connected relationships","viewer.passport.relations.hide":"Hide connected relationships","viewer.passport.relations.list":"Connected relationships","viewer.passport.copyRelation":"Copy relation","viewer.passport.copyNode":"Copy node","viewer.passport.copyPinned":"Copy link to pinned relationship","viewer.passport.copySource":"Copy link to source node","viewer.passport.copy.focused.success":"Focused node link copied","viewer.passport.copy.pinned.success":"Pinned relationship link copied","viewer.passport.copy.focused.failed":"Could not copy focused node link","viewer.passport.copy.pinned.failed":"Could not copy pinned relationship link","viewer.passport.relationship.none":"No connected relationships","viewer.passport.relationship.count.one":"{count} relation","viewer.passport.relationship.count.other":"{count} relations","viewer.passport.relationship.show.one":"Show {count} connected relationship","viewer.passport.relationship.show.other":"Show {count} connected relationships","viewer.passport.relationship.summary":"{out} outgoing · {in} incoming{loops}","viewer.passport.relationship.loops":" · {count} loop","viewer.passport.relationship.explorer":"Direct relationship explorer","viewer.passport.relationship.help":"Use arrow keys to explore relationships. Press Enter or Space to pin details; Escape clears.","viewer.passport.relationship.loopsBack":"loops back","viewer.passport.relationship.connectsTo":"connects to","viewer.passport.relationship.connectsFrom":"connects from","viewer.passport.relationship.pinned":"Pinned relationship · {from} → {to} · {label}","viewer.passport.relationship.inspect":"Inspect relationship {index} of {total}: {from} to {to}, {label}. Press Enter for details.","viewer.passport.relationship.group.out":"Outgoing","viewer.passport.relationship.group.in":"Incoming","viewer.passport.relationship.group.loop":"Self loops","viewer.passport.relationship.row":"{group}: {relationship}, {neighbor}","viewer.passport.relationship.direction.out":"OUT →","viewer.passport.relationship.direction.in":"← IN","viewer.passport.relationship.direction.loop":"LOOP","viewer.passport.sourceCount.one":"{count} verified source reference","viewer.passport.sourceCount.other":"{count} verified source references","viewer.passport.sourceMarker":"SRC","viewer.passport.beacon.one":"{count} verified source; focus this node to inspect","viewer.passport.beacon.other":"{count} verified sources; focus this node to inspect","viewer.passport.repository.open":"Open verified repository revision {revision}","viewer.passport.source.open":"Open verified source {path} at revision {revision}","viewer.passport.source.openLink":"Open ↗","viewer.passport.reach.upstream.one":"Trace {count} upstream authored node","viewer.passport.reach.upstream.other":"Trace {count} upstream authored nodes","viewer.passport.reach.downstream.one":"Trace {count} downstream authored node","viewer.passport.reach.downstream.other":"Trace {count} downstream authored nodes","viewer.passport.reach.noUpstream":"No upstream authored nodes","viewer.passport.reach.noDownstream":"No downstream authored nodes","viewer.passport.reach.status":"{direction} · {nodes} nodes · {links} links · max {hops} hops","viewer.route.eyebrow":"Route probe","viewer.route.start":"Choose a start node","viewer.route.start.find":"Find start","viewer.route.start.find.aria":"Find a route start","viewer.route.copy":"Copy link","viewer.route.copy.aria":"Copy link to traced route","viewer.route.clear":"Clear","viewer.route.clear.aria":"Clear route probe","viewer.route.traced":"Traced route","viewer.route.pickTwo":"Pick two semantic nodes on the diagram","viewer.route.pickOne":"Pick a semantic node on the diagram","viewer.route.controls":"Route journey controls","viewer.route.previous":"Previous route position","viewer.route.play":"Play route journey","viewer.route.pause":"Pause route journey","viewer.route.replay":"Replay route journey","viewer.route.next":"Next route position","viewer.route.journey":"Journey","viewer.route.pause.label":"Pause","viewer.route.replay.label":"Replay","viewer.route.overview":"Overview","viewer.route.overview.aria":"Show complete route overview","viewer.route.instructions":"Choose the source, then the destination. Direction matters.","viewer.route.destination":"Choose a destination from {label}","viewer.route.destination.find":"Find target","viewer.route.destination.find.aria":"Find a reachable route destination","viewer.route.differentDestination":"Choose a different destination","viewer.route.distinct":"A route needs two distinct semantic nodes.","viewer.route.unreachable":"No directed route to {label}","viewer.route.unreachable.detail":"{target} is not reachable from {source}. Pick a highlighted destination.","viewer.route.start.instructions":"Select the source. The next step will reveal only directed destinations.","viewer.route.copy.success":"Traced route link copied","viewer.route.copy.failed":"Could not copy traced route link","viewer.route.position":"Route position {index} of {total}: {label}","viewer.route.step":"Step {index} of {total} · {phase} · {label}","viewer.route.motionRequired":"Automatic journey requires Live motion","viewer.route.trigger.clear":"Clear traced route","viewer.route.overview.status":"{nodes} · {hops} · shortest authored route","viewer.route.overview.node.one":"{count} node","viewer.route.overview.node.other":"{count} nodes","viewer.route.overview.hop.one":"{count} directed hop","viewer.route.overview.hop.other":"{count} directed hops","viewer.route.phase.playing":"Playing","viewer.route.phase.complete":"Complete","viewer.route.phase.inspecting":"Inspecting","viewer.route.destination.count.one":"{count} directed destination available. Pick a highlighted node.","viewer.route.destination.count.other":"{count} directed destinations available. Pick a highlighted node.","viewer.route.noOutgoing":"No outgoing route starts here. Clear and choose another source.","viewer.route.result.title":"{source} to {target}","viewer.route.finder.source.title":"Choose route start","viewer.route.finder.source.placeholder":"Search route sources","viewer.route.finder.source.empty":"No matching route sources","viewer.route.finder.source.results":"Nodes that can start a route","viewer.route.finder.source.noun":"route sources","viewer.route.finder.source.badge":"start","viewer.route.finder.target.title":"Destination from {label}","viewer.route.finder.target.placeholder":"Search reachable destinations","viewer.route.finder.target.empty":"No matching reachable destinations","viewer.route.finder.target.results":"Reachable route destinations","viewer.route.finder.target.noun":"reachable destinations","viewer.route.hop.one":"{count} hop","viewer.route.hop.other":"{count} hops","viewer.lens.eyebrow":"Semantic lens","viewer.lens.title":"Compare system roles","viewer.lens.close":"Close semantic lens","viewer.lens.instruction":"Choose up to two semantic kinds. One reveals its real traffic; two compare only direct authored relationships.","viewer.lens.kinds":"Semantic kinds","viewer.lens.choose":"Choose a kind to inspect its nodes and touching relationships.","viewer.lens.copy":"Copy link to semantic lens","viewer.lens.clear":"Clear semantic lens","viewer.lens.open":"Open semantic lens","viewer.lens.openActive":"Open active semantic lens","viewer.lens.legend":"Semantic legend","viewer.lens.legend.inspect.one":"Inspect {label}, {count} node","viewer.lens.legend.inspect.other":"Inspect {label}, {count} nodes","viewer.lens.kind.count.one":"{label}, {count} node","viewer.lens.kind.count.other":"{label}, {count} nodes","viewer.lens.compare.one":"{first} → {second}: {forward} · {second} → {first}: {reverse} · {count} direct relationship","viewer.lens.compare.other":"{first} → {second}: {forward} · {second} → {first}: {reverse} · {count} direct relationships","viewer.lens.single":"{nodes} · {relationships} · connected peers remain visible","viewer.lens.node.one":"{count} {label} node","viewer.lens.node.other":"{count} {label} nodes","viewer.lens.relationship.one":"{count} touching relationship","viewer.lens.relationship.other":"{count} touching relationships","viewer.radar.title":"Semantic radar","viewer.radar.building":"Building overview","viewer.radar.openFull":"Open full semantic radar","viewer.radar.open":"Open radar","viewer.radar.close":"Close semantic radar","viewer.radar.surface":"Diagram overview. Click a node to focus it, or use arrow keys to pan.","viewer.radar.click":"Click node","viewer.radar.drag":"Drag to pan","viewer.radar.space":"Semantic radar needs more MAP space.","viewer.radar.nodes":"Semantic diagram radar nodes","viewer.radar.focus":"Focus {label} from Semantic Radar","viewer.radar.status":"{count} nodes · {viewport}","viewer.radar.fullMap":"{count} nodes · full map","viewer.radar.compacted":"Radar compacted to avoid covering the Semantic Passport or MAP controls.","viewer.radar.cancelWaiting":"Cancel semantic radar waiting for more MAP space","viewer.radar.needsSpace":"Semantic radar needs more visible MAP space","viewer.radar.viewport.full":"full map","viewer.radar.viewport.width":"{percent}% width","viewer.radar.viewport.scale":"{percent}% viewport","viewer.nav.controls":"Diagram view controls","viewer.nav.route":"Trace a directed route","viewer.nav.route.title":"Trace route (R)","viewer.nav.route.short":"PATH","viewer.nav.radar":"Open semantic radar","viewer.nav.radar.title":"Semantic radar (M)","viewer.nav.radar.short":"MAP","viewer.nav.lens":"Open semantic lens","viewer.nav.lens.title":"Semantic lens (L)","viewer.nav.lens.short":"LENS","viewer.nav.find":"Find a node","viewer.nav.find.title":"Find a node (/)","viewer.nav.guide":"Open diagram guide","viewer.nav.guide.title":"Diagram guide (?)","viewer.nav.zoomOut":"Zoom out","viewer.nav.zoomOut.title":"Zoom out (-)","viewer.nav.reset":"Reset diagram view","viewer.nav.reset.title":"Reset view (0)","viewer.nav.read":"READ","viewer.nav.zoomIn":"Zoom in","viewer.nav.zoomIn.title":"Zoom in (+)","viewer.nav.camera":"{hint}. Reset diagram view","viewer.nav.camera.title":"{semantic}{hint} · reset view (0)","viewer.nav.camera.semantic":"Semantic camera active · ","viewer.nav.level.map":"MAP","viewer.nav.level.read":"READ","viewer.nav.level.full":"FULL","viewer.nav.level.auto":"AUTO","viewer.nav.detail.map":"Zoom in to reveal relationship labels and node context","viewer.nav.detail.read":"Zoom in again to reveal tags and annotations","viewer.nav.detail.full":"Full diagram detail","viewer.intent.summary":"{label}. {out} outgoing, {in} incoming{loops}. {total} connections. Press Enter for details.","viewer.intent.loops":", {count} self loop","viewer.common.copied":"Copied","viewer.common.copyFailed":"Copy failed","viewer.common.copyLink":"Copy link","viewer.common.clear":"Clear","viewer.common.close":"Close"}}</script>
     <div class="guided-views no-print" id="guided-views" hidden aria-label="Guided diagram views">
       <button id="guided-view-prev" type="button" aria-label="Previous guided view" title="Previous guided view ([)">&#8592;</button>
@@ -5004,8 +5004,8 @@
     <!-- Main Diagram -->
     <div class="diagram-container" data-detail-level="read"
          data-preset-badge-editorial-plate="ARCHIFY / PLATE 04">
-      <svg viewBox="0 0 1180 562" role="img" lang="en" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
-        <title id="archify-diagram-title">Insurance Premium Prediction — System Map</title>
+      <svg viewBox="0 0 1360 860" role="img" lang="en" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase">
+        <title id="archify-diagram-title">Insurance Premium Prediction - System Map</title>
         <desc id="archify-diagram-description">An architecture diagram generated by Archify.</desc>
         <!-- Definitions -->
         <defs>
@@ -5030,218 +5030,251 @@
         <rect width="100%" height="100%" fill="url(#grid)" />
 
         <!-- Boundaries (behind everything) -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="1 - Training" x="10" y="270" width="1060" height="304" rx="12" class="c-region" stroke-width="1"/>
 
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="1" data-composition-frame-label="2 - Monitoring" x="290" y="70" width="240" height="114" rx="12" class="c-region" stroke-width="1"/>
+
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="2" data-composition-frame-label="3 - Deployment" x="10" y="690" width="1045" height="114" rx="12" class="c-region" stroke-width="1"/>
 
         <!-- Connection paths (before components for correct z-order) -->
-        <path data-edge-from="data" data-edge-to="pipeline" data-edge-label="read CSV" data-edge-key="0" data-edge-id="dataToPipeline" data-composition-points="190,302;260,302" d="M 190 302 L 260 302" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="pipeline" data-edge-to="bundle" data-edge-label="save fitted model" data-edge-key="1" data-edge-id="pipelineToBundle" data-composition-points="380,302;450,302" d="M 380 302 L 450 302" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="bundle" data-edge-to="api" data-edge-label="load at startup" data-edge-key="2" data-edge-id="bundleToApi" data-composition-points="570,302;640,302" d="M 570 302 L 640 302" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="api" data-edge-to="registry" data-edge-label="package in Docker" data-edge-key="3" data-edge-id="apiToRegistry" data-composition-points="760,302;830,302" d="M 760 302 L 830 302" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="registry" data-edge-to="containerApp" data-edge-label="deploy image" data-edge-key="4" data-edge-id="registryToApp" data-composition-points="950,302;1020,302" d="M 950 302 L 1020 302" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="caller" data-edge-to="containerApp" data-edge-label="POST /predict" data-edge-key="5" data-edge-id="callerToApp" data-composition-points="1080,434;1080,332" d="M 1080 434 L 1080 332" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="pipeline" data-edge-to="mlflow" data-edge-label="log run" data-edge-key="6" data-edge-id="pipelineToMlflow" data-composition-points="320,272;320,170" d="M 320 272 L 320 170" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="dvc" data-edge-to="pipeline" data-edge-label="pull data + model" data-edge-key="7" data-edge-id="dvcToPipeline" data-composition-points="190,140;225,140;225,302;260,302" d="M 190 140 L 217 140 Q 225 140 225 148 L 225 294 Q 225 302 233 302 L 260 302" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="actions" data-edge-to="registry" data-edge-label="OIDC + push" data-edge-key="8" data-edge-id="actionsToRegistry" data-composition-points="890,170;890,272" d="M 890 170 L 890 272" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="drift" data-edge-to="data" data-edge-label="compare shifted copy" data-edge-key="9" data-edge-id="driftToData" data-composition-points="130,434;130,332" d="M 130 434 L 130 332" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="nb01" data-edge-to="data" data-edge-label="writes CSV" data-edge-key="0" data-edge-id="nb01-writes" data-composition-points="190,332;320,332" d="M 190 332 L 320 332" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="data" data-edge-to="pipeline" data-edge-label="read CSV" data-edge-key="1" data-edge-id="read-csv" data-composition-points="470,332;600,332" d="M 470 332 L 600 332" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="pipeline" data-edge-to="bundle" data-edge-label="save fitted model" data-edge-key="2" data-edge-id="save-bundle" data-composition-points="760,332;890,332" d="M 760 332 L 890 332" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="pipeline" data-edge-to="mlflow" data-edge-label="log run" data-edge-key="3" data-edge-id="log-run" data-composition-points="680,364;680,490" d="M 680 364 L 680 490" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="data" data-edge-to="nb04" data-edge-label="reference data" data-edge-key="4" data-edge-id="drift-ref" data-composition-points="395,300;395,276;426,276;426,188;410,188;410,164" d="M 395 300 L 395 284 Q 395 276 403 276 L 418 276 Q 426 276 426 268 L 426 196 Q 426 188 418 188 L 418 188 Q 410 188 410 180 L 410 164" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="dvc" data-edge-to="bundle" data-edge-label="pull / push" data-edge-key="5" data-edge-id="dvc-bundle" data-composition-points="1210,570;1210,430;965,430;965,364" d="M 1210 570 L 1210 438 Q 1210 430 1202 430 L 973 430 Q 965 430 965 422 L 965 364" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="dvc" data-edge-to="data" data-edge-label="pull / push" data-edge-key="6" data-edge-id="dvc-data" data-composition-points="1140,602;395,602;395,364" d="M 1140 602 L 403 602 Q 395 602 395 594 L 395 364" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="gha" data-edge-to="gate" data-edge-label="run checks" data-edge-key="7" data-edge-id="gha-gate" data-composition-points="200,752;315,752" d="M 200 752 L 315 752" class="a-security" stroke-width="1.5" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="gate" data-edge-to="acr" data-edge-label="pass: build and push" data-edge-key="8" data-edge-id="gate-acr" data-composition-points="475,752;590,752" d="M 475 752 L 590 752" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="acr" data-edge-to="live" data-edge-label="deploy image by SHA" data-edge-key="9" data-edge-id="acr-live" data-composition-points="750,752;865,752" d="M 750 752 L 865 752" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="caller" data-edge-to="live" data-edge-label="POST /predict" data-edge-key="10" data-edge-id="caller-live" data-composition-points="1140,752;1025,752" d="M 1140 752 L 1025 752" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
 
         <!-- Components -->
-        <g id="node-data" data-node-id="data" data-node-label="Insurance data" tabindex="0" role="button" aria-label="Focus Insurance data, data/merged_data.csv, Architecture component" aria-pressed="false" data-node-kind="database" data-node-sublabel="data/merged_data.csv" data-node-context="Architecture component">
-          <title>Insurance data · data/merged_data.csv · Architecture component</title>
-          <rect x="70" y="272" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="70" y="272" width="120" height="60" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(76 278) scale(0.6875)">
+        <g id="node-nb01" data-node-id="nb01" data-node-label="Notebook 01" tabindex="0" role="button" aria-label="Focus Notebook 01, Kaggle CSV to merged_data, 1 - Training" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Kaggle CSV to merged_data" data-node-context="1 - Training">
+          <title>Notebook 01 · Kaggle CSV to merged_data · 1 - Training</title>
+          <rect x="40" y="300" width="150" height="64" rx="6" class="c-mask"/>
+          <rect x="40" y="300" width="150" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(46 306) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="115" y="330" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Notebook 01</text>
+        <text data-detail="context" x="115" y="346" class="t-muted" font-size="9" text-anchor="middle">Kaggle CSV to merged_data</text>
+        </g>
+
+        <g id="node-data" data-node-id="data" data-node-label="Insurance data" tabindex="0" role="button" aria-label="Focus Insurance data, data/merged_data.csv, 1 - Training" aria-pressed="false" data-node-kind="database" data-node-sublabel="data/merged_data.csv" data-node-context="1 - Training">
+          <title>Insurance data · data/merged_data.csv · 1 - Training</title>
+          <rect x="320" y="300" width="150" height="64" rx="6" class="c-mask"/>
+          <rect x="320" y="300" width="150" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(326 306) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="130" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Insurance data</text>
-        <text data-detail="context" x="130" y="316" class="t-muted" font-size="9" text-anchor="middle">data/merged_data.csv</text>
+          <text data-node-label="" data-detail-anchor="" x="395" y="330" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Insurance data</text>
+        <text data-detail="context" x="395" y="346" class="t-muted" font-size="9" text-anchor="middle">data/merged_data.csv</text>
         </g>
 
-        <g id="node-pipeline" data-node-id="pipeline" data-node-label="Training pipeline" tabindex="0" role="button" aria-label="Focus Training pipeline, ingest → clean → train, Architecture component" aria-pressed="false" data-node-kind="backend" data-node-sublabel="ingest → clean → train" data-node-context="Architecture component">
-          <title>Training pipeline · ingest → clean → train · Architecture component</title>
-          <rect x="260" y="272" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="260" y="272" width="120" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(266 278) scale(0.6875)">
+        <g id="node-pipeline" data-node-id="pipeline" data-node-label="Training pipeline" tabindex="0" role="button" aria-label="Focus Training pipeline, ingest, clean, train, 1 - Training" aria-pressed="false" data-node-kind="backend" data-node-sublabel="ingest, clean, train" data-node-context="1 - Training">
+          <title>Training pipeline · ingest, clean, train · 1 - Training</title>
+          <rect x="600" y="300" width="160" height="64" rx="6" class="c-mask"/>
+          <rect x="600" y="300" width="160" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(606 306) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="320" y="300" class="t-primary" font-size="10.9" font-weight="600" text-anchor="middle">Training pipeline</text>
-        <text data-detail="context" x="320" y="316" class="t-muted" font-size="8.4" text-anchor="middle">ingest → clean → train</text>
+          <text data-node-label="" data-detail-anchor="" x="680" y="330" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Training pipeline</text>
+        <text data-detail="context" x="680" y="346" class="t-muted" font-size="9" text-anchor="middle">ingest, clean, train</text>
         </g>
 
-        <g id="node-bundle" data-node-id="bundle" data-node-label="Model bundle" tabindex="0" role="button" aria-label="Focus Model bundle, models/model.pkl, Architecture component" aria-pressed="false" data-node-kind="database" data-node-sublabel="models/model.pkl" data-node-tag="6 keys" data-node-context="Architecture component">
-          <title>Model bundle · models/model.pkl · Architecture component · 6 keys</title>
-          <rect x="450" y="272" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="450" y="272" width="120" height="60" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(456 278) scale(0.6875)">
+        <g id="node-bundle" data-node-id="bundle" data-node-label="Model bundle" tabindex="0" role="button" aria-label="Focus Model bundle, models/model.pkl, 1 - Training" aria-pressed="false" data-node-kind="database" data-node-sublabel="models/model.pkl" data-node-context="1 - Training">
+          <title>Model bundle · models/model.pkl · 1 - Training</title>
+          <rect x="890" y="300" width="150" height="64" rx="6" class="c-mask"/>
+          <rect x="890" y="300" width="150" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(896 306) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="510" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Model bundle</text>
-        <text data-detail="context" x="510" y="316" class="t-muted" font-size="9" text-anchor="middle">models/model.pkl</text>
-        <text data-detail="fine" x="510" y="324" class="t-database" font-size="7" text-anchor="middle">6 keys</text>
+          <text data-node-label="" data-detail-anchor="" x="965" y="330" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Model bundle</text>
+        <text data-detail="context" x="965" y="346" class="t-muted" font-size="9" text-anchor="middle">models/model.pkl</text>
         </g>
 
-        <g id="node-api" data-node-id="api" data-node-label="Prediction API" tabindex="0" role="button" aria-label="Focus Prediction API, FastAPI + model bundle, Architecture component" aria-pressed="false" data-node-kind="backend" data-node-sublabel="FastAPI + model bundle" data-node-context="Architecture component">
-          <title>Prediction API · FastAPI + model bundle · Architecture component</title>
-          <rect x="640" y="272" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="640" y="272" width="120" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(646 278) scale(0.6875)">
+        <g id="node-mlflow" data-node-id="mlflow" data-node-label="MLflow" tabindex="0" role="button" aria-label="Focus MLflow, runs, metrics, artefacts, 1 - Training" aria-pressed="false" data-node-kind="database" data-node-sublabel="runs, metrics, artefacts" data-node-context="1 - Training">
+          <title>MLflow · runs, metrics, artefacts · 1 - Training</title>
+          <rect x="600" y="490" width="160" height="64" rx="6" class="c-mask"/>
+          <rect x="600" y="490" width="160" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(606 496) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="680" y="520" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">MLflow</text>
+        <text data-detail="context" x="680" y="536" class="t-muted" font-size="9" text-anchor="middle">runs, metrics, artefacts</text>
+        </g>
+
+        <g id="node-nb04" data-node-id="nb04" data-node-label="Drift check" tabindex="0" role="button" aria-label="Focus Drift check, reads data and model.pkl, 2 - Monitoring" aria-pressed="false" data-node-kind="backend" data-node-sublabel="reads data and model.pkl" data-node-tag="writes reports/*.html" data-node-context="2 - Monitoring">
+          <title>Drift check · reads data and model.pkl · 2 - Monitoring · writes reports/*.html</title>
+          <rect x="320" y="100" width="180" height="64" rx="6" class="c-mask"/>
+          <rect x="320" y="100" width="180" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(326 106) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="700" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Prediction API</text>
-        <text data-detail="context" x="700" y="316" class="t-muted" font-size="8.4" text-anchor="middle">FastAPI + model bundle</text>
+          <text data-node-label="" data-detail-anchor="" x="410" y="130" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Drift check</text>
+        <text data-detail="context" x="410" y="146" class="t-muted" font-size="9" text-anchor="middle">reads data and model.pkl</text>
+        <text data-detail="fine" x="410" y="156" class="t-backend" font-size="7" text-anchor="middle">writes reports/*.html</text>
         </g>
 
-        <g id="node-registry" data-node-id="registry" data-node-label="Container registry" tabindex="0" role="button" aria-label="Focus Container registry, Azure ACR, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Azure ACR" data-node-context="Architecture component">
-          <title>Container registry · Azure ACR · Architecture component</title>
-          <rect x="830" y="272" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="830" y="272" width="120" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(836 278) scale(0.6875)">
+        <g id="node-dvc" data-node-id="dvc" data-node-label="DVC remote" tabindex="0" role="button" aria-label="Focus DVC remote, Azure Blob Storage, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Azure Blob Storage" data-node-context="Architecture component">
+          <title>DVC remote · Azure Blob Storage · Architecture component</title>
+          <rect x="1140" y="570" width="140" height="64" rx="6" class="c-mask"/>
+          <rect x="1140" y="570" width="140" height="64" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(1146 576) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="890" y="300" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">Container registry</text>
-        <text data-detail="context" x="890" y="316" class="t-muted" font-size="9" text-anchor="middle">Azure ACR</text>
+          <text data-node-label="" data-detail-anchor="" x="1210" y="600" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">DVC remote</text>
+        <text data-detail="context" x="1210" y="616" class="t-muted" font-size="9" text-anchor="middle">Azure Blob Storage</text>
         </g>
 
-        <g id="node-containerApp" data-node-id="containerApp" data-node-label="Live API" tabindex="0" role="button" aria-label="Focus Live API, Azure Container Apps, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Azure Container Apps" data-node-context="Architecture component">
-          <title>Live API · Azure Container Apps · Architecture component</title>
-          <rect x="1020" y="272" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="1020" y="272" width="120" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(1026 278) scale(0.6875)">
+        <g id="node-gha" data-node-id="gha" data-node-label="GitHub Actions" tabindex="0" role="button" aria-label="Focus GitHub Actions, push to master, 3 - Deployment" aria-pressed="false" data-node-kind="security" data-node-sublabel="push to master" data-node-tag="OIDC login, then dvc pull" data-node-context="3 - Deployment">
+          <title>GitHub Actions · push to master · 3 - Deployment · OIDC login, then dvc pull</title>
+          <rect x="40" y="720" width="160" height="64" rx="6" class="c-mask"/>
+          <rect x="40" y="720" width="160" height="64" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(46 726) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="120" y="750" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">GitHub Actions</text>
+        <text data-detail="context" x="120" y="766" class="t-muted" font-size="9" text-anchor="middle">push to master</text>
+        <text data-detail="fine" x="120" y="776" class="t-security" font-size="7" text-anchor="middle">OIDC login, then dvc pull</text>
+        </g>
+
+        <g id="node-gate" data-node-id="gate" data-node-label="Deploy gate" tabindex="0" role="button" aria-label="Focus Deploy gate, tests, then golden check, 3 - Deployment" aria-pressed="false" data-node-kind="security" data-node-sublabel="tests, then golden check" data-node-tag="fail = nothing ships" data-node-context="3 - Deployment">
+          <title>Deploy gate · tests, then golden check · 3 - Deployment · fail = nothing ships</title>
+          <rect x="315" y="720" width="160" height="64" rx="6" class="c-mask"/>
+          <rect x="315" y="720" width="160" height="64" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(321 726) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="395" y="750" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Deploy gate</text>
+        <text data-detail="context" x="395" y="766" class="t-muted" font-size="9" text-anchor="middle">tests, then golden check</text>
+        <text data-detail="fine" x="395" y="776" class="t-security" font-size="7" text-anchor="middle">fail = nothing ships</text>
+        </g>
+
+        <g id="node-acr" data-node-id="acr" data-node-label="Container registry" tabindex="0" role="button" aria-label="Focus Container registry, Azure ACR, 3 - Deployment" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Azure ACR" data-node-context="3 - Deployment">
+          <title>Container registry · Azure ACR · 3 - Deployment</title>
+          <rect x="590" y="720" width="160" height="64" rx="6" class="c-mask"/>
+          <rect x="590" y="720" width="160" height="64" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(596 726) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="1080" y="300" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Live API</text>
-        <text data-detail="context" x="1080" y="316" class="t-muted" font-size="9" text-anchor="middle">Azure Container Apps</text>
+          <text data-node-label="" data-detail-anchor="" x="670" y="750" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Container registry</text>
+        <text data-detail="context" x="670" y="766" class="t-muted" font-size="9" text-anchor="middle">Azure ACR</text>
+        </g>
+
+        <g id="node-live" data-node-id="live" data-node-label="Live API" tabindex="0" role="button" aria-label="Focus Live API, Azure Container Apps, 3 - Deployment" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="Azure Container Apps" data-node-context="3 - Deployment">
+          <title>Live API · Azure Container Apps · 3 - Deployment</title>
+          <rect x="865" y="720" width="160" height="64" rx="6" class="c-mask"/>
+          <rect x="865" y="720" width="160" height="64" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(871 726) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="945" y="750" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Live API</text>
+        <text data-detail="context" x="945" y="766" class="t-muted" font-size="9" text-anchor="middle">Azure Container Apps</text>
         </g>
 
         <g id="node-caller" data-node-id="caller" data-node-label="API caller" tabindex="0" role="button" aria-label="Focus API caller, JSON over HTTPS, Architecture component" aria-pressed="false" data-node-kind="external" data-node-sublabel="JSON over HTTPS" data-node-context="Architecture component">
           <title>API caller · JSON over HTTPS · Architecture component</title>
-          <rect x="1020" y="434" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="1020" y="434" width="120" height="60" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(1026 440) scale(0.6875)">
+          <rect x="1140" y="720" width="140" height="64" rx="6" class="c-mask"/>
+          <rect x="1140" y="720" width="140" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(1146 726) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="1080" y="462" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">API caller</text>
-        <text data-detail="context" x="1080" y="478" class="t-muted" font-size="9" text-anchor="middle">JSON over HTTPS</text>
-        </g>
-
-        <g id="node-mlflow" data-node-id="mlflow" data-node-label="MLflow" tabindex="0" role="button" aria-label="Focus MLflow, runs, metrics, artefacts, Architecture component" aria-pressed="false" data-node-kind="database" data-node-sublabel="runs, metrics, artefacts" data-node-context="Architecture component">
-          <title>MLflow · runs, metrics, artefacts · Architecture component</title>
-          <rect x="260" y="110" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="260" y="110" width="120" height="60" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(266 116) scale(0.6875)">
-            <ellipse cx="8" cy="4" rx="5" ry="2"/>
-            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="320" y="138" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">MLflow</text>
-        <text data-detail="context" x="320" y="154" class="t-muted" font-size="7.7" text-anchor="middle">runs, metrics, artefacts</text>
-        </g>
-
-        <g id="node-dvc" data-node-id="dvc" data-node-label="DVC remote" tabindex="0" role="button" aria-label="Focus DVC remote, data + model artefacts, Architecture component" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="data + model artefacts" data-node-context="Architecture component">
-          <title>DVC remote · data + model artefacts · Architecture component</title>
-          <rect x="70" y="110" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="70" y="110" width="120" height="60" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(76 116) scale(0.6875)">
-            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="130" y="138" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">DVC remote</text>
-        <text data-detail="context" x="130" y="154" class="t-muted" font-size="8.4" text-anchor="middle">data + model artefacts</text>
-        </g>
-
-        <g id="node-actions" data-node-id="actions" data-node-label="GitHub Actions" tabindex="0" role="button" aria-label="Focus GitHub Actions, test → build → deploy, Architecture component" aria-pressed="false" data-node-kind="security" data-node-sublabel="test → build → deploy" data-node-tag="OIDC" data-node-context="Architecture component">
-          <title>GitHub Actions · test → build → deploy · Architecture component · OIDC</title>
-          <rect x="830" y="110" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="830" y="110" width="120" height="60" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(836 116) scale(0.6875)">
-            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
-            <path d="m5.8 8 1.5 1.5 3-3"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="890" y="138" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">GitHub Actions</text>
-        <text data-detail="context" x="890" y="154" class="t-muted" font-size="8.8" text-anchor="middle">test → build → deploy</text>
-        <text data-detail="fine" x="890" y="162" class="t-security" font-size="7" text-anchor="middle">OIDC</text>
-        </g>
-
-        <g id="node-drift" data-node-id="drift" data-node-label="Drift report" tabindex="0" role="button" aria-label="Focus Drift report, Evidently notebook, Architecture component" aria-pressed="false" data-node-kind="external" data-node-sublabel="Evidently notebook" data-node-tag="simulated data" data-node-context="Architecture component">
-          <title>Drift report · Evidently notebook · Architecture component · simulated data</title>
-          <rect x="70" y="434" width="120" height="60" rx="6" class="c-mask"/>
-          <rect x="70" y="434" width="120" height="60" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(76 440) scale(0.6875)">
-            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
-            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="130" y="462" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Drift report</text>
-        <text data-detail="context" x="130" y="478" class="t-muted" font-size="9" text-anchor="middle">Evidently notebook</text>
-        <text data-detail="fine" x="130" y="486" class="t-external" font-size="7" text-anchor="middle">simulated data</text>
+          <text data-node-label="" data-detail-anchor="" x="1210" y="750" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">API caller</text>
+        <text data-detail="context" x="1210" y="766" class="t-muted" font-size="9" text-anchor="middle">JSON over HTTPS</text>
         </g>
 
         <!-- Connection labels -->
-        <g data-detail="context" data-edge-from="data" data-edge-to="pipeline" data-edge-label="read CSV" data-edge-key="0" data-edge-id="dataToPipeline">
-          <rect x="170.8" y="336" width="48.4" height="14" rx="3" class="c-mask"/>
-          <text x="195" y="346" class="t-backend" font-size="8" text-anchor="middle">read CSV</text>
+        <g data-detail="context" data-edge-from="nb01" data-edge-to="data" data-edge-label="writes CSV" data-edge-key="0" data-edge-id="nb01-writes">
+          <rect x="226" y="312" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="255" y="322" class="t-backend" font-size="8" text-anchor="middle">writes CSV</text>
         </g>
-        <g data-detail="context" data-edge-from="pipeline" data-edge-to="bundle" data-edge-label="save fitted model" data-edge-key="1" data-edge-id="pipelineToBundle">
-          <rect x="369.2" y="336" width="91.6" height="14" rx="3" class="c-mask"/>
-          <text x="415" y="346" class="t-backend" font-size="8" text-anchor="middle">save fitted model</text>
+        <g data-detail="context" data-edge-from="data" data-edge-to="pipeline" data-edge-label="read CSV" data-edge-key="1" data-edge-id="read-csv">
+          <rect x="510.8" y="312" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="535" y="322" class="t-backend" font-size="8" text-anchor="middle">read CSV</text>
         </g>
-        <g data-detail="context" data-edge-from="bundle" data-edge-to="api" data-edge-label="load at startup" data-edge-key="2" data-edge-id="bundleToApi">
-          <rect x="564" y="258" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="605" y="268" class="t-backend" font-size="8" text-anchor="middle">load at startup</text>
+        <g data-detail="context" data-edge-from="pipeline" data-edge-to="bundle" data-edge-label="save fitted model" data-edge-key="2" data-edge-id="save-bundle">
+          <rect x="779.2" y="312" width="91.6" height="14" rx="3" class="c-mask"/>
+          <text x="825" y="322" class="t-backend" font-size="8" text-anchor="middle">save fitted model</text>
         </g>
-        <g data-detail="context" data-edge-from="api" data-edge-to="registry" data-edge-label="package in Docker" data-edge-key="3" data-edge-id="apiToRegistry">
-          <rect x="749.2" y="336" width="91.6" height="14" rx="3" class="c-mask"/>
-          <text x="795" y="346" class="t-backend" font-size="8" text-anchor="middle">package in Docker</text>
+        <g data-detail="context" data-edge-from="pipeline" data-edge-to="mlflow" data-edge-label="log run" data-edge-key="3" data-edge-id="log-run">
+          <rect x="658.2" y="406" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="680" y="416" class="t-messagebus" font-size="8" text-anchor="middle">log run</text>
         </g>
-        <g data-detail="context" data-edge-from="registry" data-edge-to="containerApp" data-edge-label="deploy image" data-edge-key="4" data-edge-id="registryToApp">
-          <rect x="951.2" y="282" width="67.6" height="14" rx="3" class="c-mask"/>
-          <text x="985" y="292" class="t-backend" font-size="8" text-anchor="middle">deploy image</text>
+        <g data-detail="context" data-edge-from="data" data-edge-to="nb04" data-edge-label="reference data" data-edge-key="4" data-edge-id="drift-ref">
+          <rect x="371.9" y="256" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="410.5" y="266" class="t-messagebus" font-size="8" text-anchor="middle">reference data</text>
         </g>
-        <g data-detail="context" data-edge-from="caller" data-edge-to="containerApp" data-edge-label="POST /predict" data-edge-key="5" data-edge-id="callerToApp">
-          <rect x="1043.8" y="414" width="72.4" height="14" rx="3" class="c-mask"/>
-          <text x="1080" y="424" class="t-backend" font-size="8" text-anchor="middle">POST /predict</text>
+        <g data-detail="context" data-edge-from="dvc" data-edge-to="bundle" data-edge-label="pull / push" data-edge-key="5" data-edge-id="dvc-bundle">
+          <rect x="1056.1" y="410" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="1087.5" y="420" class="t-messagebus" font-size="8" text-anchor="middle">pull / push</text>
         </g>
-        <g data-detail="context" data-edge-from="pipeline" data-edge-to="mlflow" data-edge-label="log run" data-edge-key="6" data-edge-id="pipelineToMlflow">
-          <rect x="298.2" y="252" width="43.6" height="14" rx="3" class="c-mask"/>
-          <text x="320" y="262" class="t-messagebus" font-size="8" text-anchor="middle">log run</text>
+        <g data-detail="context" data-edge-from="dvc" data-edge-to="data" data-edge-label="pull / push" data-edge-key="6" data-edge-id="dvc-data">
+          <rect x="363.6" y="463" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="395" y="473" class="t-messagebus" font-size="8" text-anchor="middle">pull / push</text>
         </g>
-        <g data-detail="context" data-edge-from="dvc" data-edge-to="pipeline" data-edge-label="pull data + model" data-edge-key="7" data-edge-id="dvcToPipeline">
-          <rect x="179.2" y="201" width="91.6" height="14" rx="3" class="c-mask"/>
-          <text x="225" y="211" class="t-messagebus" font-size="8" text-anchor="middle">pull data + model</text>
+        <g data-detail="context" data-edge-from="gha" data-edge-to="gate" data-edge-label="run checks" data-edge-key="7" data-edge-id="gha-gate">
+          <rect x="228.5" y="732" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="257.5" y="742" class="t-security" font-size="8" text-anchor="middle">run checks</text>
         </g>
-        <g data-detail="context" data-edge-from="actions" data-edge-to="registry" data-edge-label="OIDC + push" data-edge-key="8" data-edge-id="actionsToRegistry">
-          <rect x="858.6" y="174" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="890" y="184" class="t-security" font-size="8" text-anchor="middle">OIDC + push</text>
+        <g data-detail="context" data-edge-from="gate" data-edge-to="acr" data-edge-label="pass: build and push" data-edge-key="8" data-edge-id="gate-acr">
+          <rect x="479.5" y="732" width="106" height="14" rx="3" class="c-mask"/>
+          <text x="532.5" y="742" class="t-backend" font-size="8" text-anchor="middle">pass: build and push</text>
         </g>
-        <g data-detail="context" data-edge-from="drift" data-edge-to="data" data-edge-label="compare shifted copy" data-edge-key="9" data-edge-id="driftToData">
-          <rect x="77" y="414" width="106" height="14" rx="3" class="c-mask"/>
-          <text x="130" y="424" class="t-messagebus" font-size="8" text-anchor="middle">compare shifted copy</text>
+        <g data-detail="context" data-edge-from="acr" data-edge-to="live" data-edge-label="deploy image by SHA" data-edge-key="9" data-edge-id="acr-live">
+          <rect x="756.9" y="732" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="807.5" y="742" class="t-backend" font-size="8" text-anchor="middle">deploy image by SHA</text>
+        </g>
+        <g data-detail="context" data-edge-from="caller" data-edge-to="live" data-edge-label="POST /predict" data-edge-key="10" data-edge-id="caller-live">
+          <rect x="1046.3" y="732" width="72.4" height="14" rx="3" class="c-mask"/>
+          <text x="1082.5" y="742" class="t-muted" font-size="8" text-anchor="middle">POST /predict</text>
         </g>
 
         <!-- Boundary labels (foreground masks keep routes out of titles) -->
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="0" data-composition-frame-kind="region" data-composition-frame-label="1 - Training">
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="280" width="74.8" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="293" class="t-cloud" font-size="9" font-weight="600">1 - Training</text>
+        </g>
 
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="1" data-composition-frame-kind="region" data-composition-frame-label="2 - Monitoring">
+          <rect data-graph-role="structural-frame-label-mask" x="294" y="80" width="85.6" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="298" y="93" class="t-cloud" font-size="9" font-weight="600">2 - Monitoring</text>
+        </g>
+
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="2" data-composition-frame-kind="region" data-composition-frame-label="3 - Deployment">
+          <rect data-graph-role="structural-frame-label-mask" x="14" y="700" width="85.6" height="16" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="18" y="713" class="t-cloud" font-size="9" font-weight="600">3 - Deployment</text>
+        </g>
 
         <!-- Legend -->
         <g data-legend="" data-legend-bridge="">
-          <text x="40" y="526" class="t-primary" font-size="12" font-weight="650">Legend</text>
-          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Backend" data-legend-x="40" data-legend-baseline="546" data-legend-width="78">
-            <rect x="40" y="537" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
-            <text x="62" y="546" class="t-muted" font-size="10" font-weight="500">Backend</text>
+          <text x="40" y="824" class="t-primary" font-size="12" font-weight="650">Legend</text>
+          <g data-legend-semantic-kind="backend" data-legend-kind="backend" data-legend-label="Backend" data-legend-x="40" data-legend-baseline="844" data-legend-width="78">
+            <rect x="40" y="835" width="16" height="10" rx="2.5" class="c-backend" stroke-width="1"/>
+            <text x="62" y="844" class="t-muted" font-size="10" font-weight="500">Backend</text>
           </g>
-          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Database" data-legend-x="140" data-legend-baseline="546" data-legend-width="83">
-            <rect x="140" y="537" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
-            <text x="162" y="546" class="t-muted" font-size="10" font-weight="500">Database</text>
+          <g data-legend-semantic-kind="database" data-legend-kind="database" data-legend-label="Database" data-legend-x="140" data-legend-baseline="844" data-legend-width="83">
+            <rect x="140" y="835" width="16" height="10" rx="2.5" class="c-database" stroke-width="1"/>
+            <text x="162" y="844" class="t-muted" font-size="10" font-weight="500">Database</text>
           </g>
-          <g data-legend-semantic-kind="cloud" data-legend-kind="cloud" data-legend-label="Cloud" data-legend-x="245" data-legend-baseline="546" data-legend-width="68">
-            <rect x="245" y="537" width="16" height="10" rx="2.5" class="c-cloud" stroke-width="1"/>
-            <text x="267" y="546" class="t-muted" font-size="10" font-weight="500">Cloud</text>
+          <g data-legend-semantic-kind="cloud" data-legend-kind="cloud" data-legend-label="Cloud" data-legend-x="245" data-legend-baseline="844" data-legend-width="68">
+            <rect x="245" y="835" width="16" height="10" rx="2.5" class="c-cloud" stroke-width="1"/>
+            <text x="267" y="844" class="t-muted" font-size="10" font-weight="500">Cloud</text>
           </g>
-          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Security" data-legend-x="335" data-legend-baseline="546" data-legend-width="83">
-            <rect x="335" y="537" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
-            <text x="357" y="546" class="t-muted" font-size="10" font-weight="500">Security</text>
+          <g data-legend-semantic-kind="security" data-legend-kind="security" data-legend-label="Security" data-legend-x="335" data-legend-baseline="844" data-legend-width="83">
+            <rect x="335" y="835" width="16" height="10" rx="2.5" class="c-security" stroke-width="1"/>
+            <text x="357" y="844" class="t-muted" font-size="10" font-weight="500">Security</text>
           </g>
-          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="External" data-legend-x="440" data-legend-baseline="546" data-legend-width="83">
-            <rect x="440" y="537" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
-            <text x="462" y="546" class="t-muted" font-size="10" font-weight="500">External</text>
+          <g data-legend-semantic-kind="external" data-legend-kind="external" data-legend-label="External" data-legend-x="440" data-legend-baseline="844" data-legend-width="83">
+            <rect x="440" y="835" width="16" height="10" rx="2.5" class="c-external" stroke-width="1"/>
+            <text x="462" y="844" class="t-muted" font-size="10" font-weight="500">External</text>
           </g>
         </g>
       </svg>
@@ -5436,30 +5469,32 @@
           <h3>Train</h3>
         </div>
         <ul>
+          <li>&bull; Notebook 01 writes data/merged_data.csv</li>
           <li>&bull; One command runs ingest, clean and train</li>
-          <li>&bull; MLflow records the experiment</li>
+          <li>&bull; MLflow records parameters and metrics</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-dot emerald"></div>
-          <h3>Serve</h3>
+          <div class="card-dot rose"></div>
+          <h3>Ship</h3>
         </div>
         <ul>
-          <li>&bull; The model bundle travels inside the image</li>
-          <li>&bull; FastAPI returns a premium in USD</li>
+          <li>&bull; Tests and the golden check run before the build</li>
+          <li>&bull; GitHub Actions builds and pushes the image</li>
+          <li>&bull; A model that scores worse blocks the deploy</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-dot amber"></div>
+          <div class="card-dot violet"></div>
           <h3>Operate</h3>
         </div>
         <ul>
-          <li>&bull; DVC keeps large files outside Git</li>
-          <li>&bull; Drift monitoring uses simulated current data</li>
+          <li>&bull; DVC pulls and pushes data and models</li>
+          <li>&bull; Drift is checked by hand against a simulated sample</li>
         </ul>
       </div>
     </div>
