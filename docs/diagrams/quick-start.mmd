@@ -1,0 +1,12 @@
+flowchart LR
+    INSTALL[1. uv sync] --> PULL[2. dvc pull]
+    PULL --> CHOOSE{Retrain?}
+    CHOOSE -->|No| SERVE[Start FastAPI]
+    CHOOSE -->|Yes| TRAIN[python main.py]
+    TRAIN --> SERVE
+    SERVE --> TRY[Open /docs]
+
+    classDef action fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef result fill:#dcfce7,stroke:#15803d,color:#111827
+    class INSTALL,PULL,CHOOSE,TRAIN,SERVE action
+    class TRY result

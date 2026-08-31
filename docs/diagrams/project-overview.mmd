@@ -1,0 +1,50 @@
+flowchart LR
+    RAW([Kaggle insurance.csv]):::input
+
+    subgraph TRAIN["1 - Training"]
+        DATA[("data/merged_data.csv")]:::store
+        PIPE["ingest → clean → train"]:::process
+        BUNDLE[("models/model.pkl")]:::store
+        MLFLOW[("MLflow<br/>runs + metrics")]:::store
+        DATA --> PIPE --> BUNDLE
+        PIPE -. "log run" .-> MLFLOW
+    end
+
+    DVC[("DVC remote<br/>Azure Blob")]:::store
+
+    subgraph WATCH["2 - Monitoring"]
+        NB4["Notebook 04<br/>Evidently"]:::process
+        REPORTS[("reports/*.html")]:::output
+        NB4 --> REPORTS
+    end
+
+    subgraph SHIP["3 - Deployment"]
+        GHA["GitHub Actions<br/>push to master"]:::process
+        GATE{"Tests +<br/>golden check"}:::gate
+        IMAGE["Docker image<br/>app.py + model.pkl"]:::process
+        ACR[("Azure ACR")]:::store
+        LIVE["Azure Container Apps"]:::output
+        STOP([Nothing ships]):::gate
+        GHA --> GATE
+        GATE -- pass --> IMAGE --> ACR --> LIVE
+        GATE -- fail --> STOP
+    end
+
+    CALLER([API caller]):::input
+
+    RAW -- "notebook 01" --> DATA
+    DATA <-. "pull / push" .-> DVC
+    BUNDLE <-. "pull / push" .-> DVC
+    DATA --> NB4
+    BUNDLE --> NB4
+    DVC -. "dvc pull" .-> GHA
+    CALLER -- "POST /predict" --> LIVE
+
+    classDef input fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef process fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef store fill:#ede9fe,stroke:#6d28d9,color:#111827
+    classDef output fill:#dcfce7,stroke:#15803d,color:#111827
+    classDef gate fill:#fee2e2,stroke:#b91c1c,color:#111827
+    style TRAIN fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:6 4,color:#334155
+    style WATCH fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:6 4,color:#334155
+    style SHIP  fill:#f8fafc,stroke:#94a3b8,stroke-dasharray:6 4,color:#334155

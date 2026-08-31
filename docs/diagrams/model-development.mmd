@@ -1,0 +1,14 @@
+flowchart LR
+    N1[01 Load data] --> N2[02 Explore and clean]
+    N2 --> N3[03 Compare 5 models]
+    N3 --> CFG[Choose model in config.yml]
+    CFG --> PIPE[Run production pipeline]
+    PIPE --> BUNDLE[(Save model bundle)]
+    BUNDLE --> N4[04 Check drift]
+
+    classDef notebook fill:#fef3c7,stroke:#b45309,color:#111827
+    classDef process fill:#dbeafe,stroke:#1d4ed8,color:#111827
+    classDef output fill:#dcfce7,stroke:#15803d,color:#111827
+    class N1,N2,N3,N4 notebook
+    class CFG,PIPE process
+    class BUNDLE output
