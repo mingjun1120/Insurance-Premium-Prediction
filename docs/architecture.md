@@ -16,13 +16,19 @@ decisions.
 
 The large map is also available as an
 [interactive HTML view](assets/architecture.html). Download or open it locally
-to switch themes, search nodes, and inspect the linked source locations.
+to switch themes, search nodes, step through the four guided views, and inspect
+the linked source locations.
 
 There are three paths to remember:
 
 - **Train:** CSV → cleaning → fitted model bundle → MLflow record.
 - **Serve:** JSON → validation → shared predictor → premium in dollars.
 - **Ship:** GitHub Actions → tests → Docker image → Azure Container Apps.
+
+The arrow worth tracing twice is **Model bundle → Serving image**. `models/model.pkl`
+is copied into the image at build time ([`Dockerfile`](../Dockerfile#L61)), which is
+why the model has to exist on disk before `docker build`, and why the running API
+reads the copy inside its own image rather than the DVC remote.
 
 ## Trace A: one training run
 

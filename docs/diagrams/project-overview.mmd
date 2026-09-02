@@ -38,6 +38,7 @@ flowchart LR
     DATA --> NB4
     BUNDLE --> NB4
     DVC -. "dvc pull" .-> GHA
+    BUNDLE -- "baked into the image" --> IMAGE
     CALLER -- "POST /predict" --> LIVE
 
     classDef input fill:#fef3c7,stroke:#b45309,color:#111827
