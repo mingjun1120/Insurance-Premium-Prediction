@@ -134,6 +134,20 @@ data.dvc               Pointer to data/
 models.dvc             Pointer to models/
 ```
 
+`dvc pull` restores four files into `data/`. Only one of them is the pipeline's
+input:
+
+| File | Written by | Read by |
+| --- | --- | --- |
+| `insurance.csv` | Downloaded from Kaggle | Notebook 01 |
+| `merged_data.csv` | Notebook 01 | The training pipeline, plus notebooks 02 and 04 |
+| `cleaned_data.csv` | Notebook 02 | Notebook 03 |
+| `production.csv` | Notebook 04 | Nothing; kept as the simulated drift sample |
+
+`config.yml` points `data.data_path` at `merged_data.csv`, not at
+`cleaned_data.csv`. The pipeline cleans the raw file itself through
+`steps/clean.py`, so it never depends on a notebook having been run.
+
 Generated or external paths:
 
 | Path | Owner | Git status |

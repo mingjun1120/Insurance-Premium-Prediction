@@ -115,6 +115,11 @@ Run the notebook from top to bottom. It creates:
 | `reports/baseline_drift.html` | Training split vs test split. |
 | `reports/production_drift.html` | Training split vs a deliberately shifted sample. |
 
+It also writes the shifted sample itself to `data/production.csv`, which is
+inside the DVC-tracked `data/` directory. The sample is seeded, so a re-run
+normally reproduces the same file and `dvc status` stays quiet; check it after
+changing the simulation.
+
 The shifted sample is simulated and contains no real production traffic.
 
 Read the report in this order:

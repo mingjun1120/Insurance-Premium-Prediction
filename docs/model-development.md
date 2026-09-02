@@ -17,9 +17,14 @@ in reusable code.
 | Notebook | Main question | Output used later |
 | --- | --- | --- |
 | `01_load_data.ipynb` | Can the raw data be loaded into one clean table? | `data/merged_data.csv` |
-| `02_eda_and_preprocessing.ipynb` | What is in the data, and which cleaning rules are justified? | Rules implemented in `steps/clean.py` |
+| `02_eda_and_preprocessing.ipynb` | What is in the data, and which cleaning rules are justified? | `data/cleaned_data.csv`, and rules implemented in `steps/clean.py` |
 | `03_model_training.ipynb` | Which model and target treatment work best? | Winning parameters in `config.yml` |
-| `04_monitoring.ipynb` | Can Evidently detect a shifted current sample? | Two HTML reports in `reports/` |
+| `04_monitoring.ipynb` | Can Evidently detect a shifted current sample? | Two HTML reports in `reports/`, and `data/production.csv` |
+
+Run them in order. Notebook 03 reads `data/cleaned_data.csv`, which notebook 02
+writes, so 03 cannot run on a fresh clone until either 02 has run or `dvc pull`
+has restored the file. The training pipeline does not share that dependency: it
+reads `data/merged_data.csv` and cleans it itself.
 
 The dataset has 1,338 rows. The target is annual medical insurance `charges`.
 The six input features are age, sex, BMI, number of children, smoking status,
