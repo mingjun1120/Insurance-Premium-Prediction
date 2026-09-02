@@ -1,13 +1,20 @@
 # Configuration for the training pipeline (main.py).
 #
-# Everything the pipeline needs lives here, so a run can be reproduced from this
-# file alone. MLflow saves a copy of it with every run.
+# Every setting you would change between runs lives here, so a run can be
+# reproduced from this file plus the code at that commit. MLflow saves a copy of
+# it with every run.
 
 data:
   # Notebook 01 writes this file. It is the raw input; steps/clean.py does the
   # cleaning, so this is deliberately NOT data/cleaned_data.csv.
   data_path: data/merged_data.csv
   target: charges
+
+# NOT HERE: the six cleaning thresholds. They are module constants at the top of
+# steps/clean.py (MISSING_COLUMN_DROP_SHARE, LOW_VARIANCE_NUMERIC,
+# LOW_VARIANCE_CATEGORICAL, CARDINALITY_THRESHOLD, CATEGORY_COVERAGE_TO_KEEP,
+# CORRELATION_THRESHOLD), because they are notebook 02's findings about this
+# dataset rather than knobs to turn between runs. Edit them there.
 
 train:
   test_size: 0.2

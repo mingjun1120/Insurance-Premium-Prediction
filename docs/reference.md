@@ -105,7 +105,8 @@ Invalid input returns HTTP 422 before prediction code runs.
 | `feature_order` | Builds inference frames in training order. |
 | `categorical_features` | Restores pandas `category` dtypes. |
 
-The current predictor loads `target` but does not otherwise use it at runtime.
+`Predictor` unpacks the other five keys onto itself. `target` stays inside the
+bundle dict and is never read at runtime.
 
 ## Project layout
 
@@ -115,8 +116,9 @@ app.py                FastAPI service
 config.yml            Training and MLflow settings
 Dockerfile            Two-stage serving image
 main.py               Training entry points
-samples.json           Three valid API examples
+samples.json          Three example bodies to paste into /docs (one at a time)
 steps/
+  __init__.py          PROJECT_ROOT, load_config(), resolve()
   ingest.py            Read data
   clean.py             Apply seven cleaning rules
   train.py             Build, tune, fit, and save
@@ -127,7 +129,7 @@ notebooks/
   03_model_training.ipynb
   04_monitoring.ipynb
 tests/                 Unit, integration, API, and golden tests
-docs/                  Six reader guides and diagram assets
+docs/                  Five ordered guides, this reference, and diagram assets
 data.dvc               Pointer to data/
 models.dvc             Pointer to models/
 ```

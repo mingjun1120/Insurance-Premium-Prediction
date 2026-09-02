@@ -114,8 +114,8 @@ page repeats this path at the top so you always know where you are.
 
 About an hour end to end. Guide 1 alone gets you a working prediction.
 
-The architecture page includes a source-linked interactive system map and a
-smaller request sequence diagram.
+The architecture page includes a source-linked interactive system map, a
+training-flow diagram, and a request sequence diagram.
 
 ## Temporary demo
 

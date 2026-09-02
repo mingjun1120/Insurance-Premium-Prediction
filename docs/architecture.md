@@ -38,12 +38,13 @@ There are three paths to remember:
 | 4 | [`Trainer.train_model()`](../steps/train.py#L198) | Fit once or run grid search. |
 | 5 | [`Trainer.save_model()`](../steps/train.py#L257) | Save the model and its context together. |
 | 6 | [`Predictor.evaluate_model()`](../steps/predict.py#L104) | Report RMSE, MAE, R², and MAPE in dollars. |
-| 7 | [`train_with_mlflow()`](../main.py#L101) | Log parameters, metrics, model, and config. |
 
-Two entry points share `run_pipeline()`:
+Two entry points wrap that table; both call `run_pipeline()`, so neither can
+drift from the other:
 
-- `main()` prints the result only.
-- `train_with_mlflow()` prints and records the same result.
+- [`main()`](../main.py#L89) prints the result only.
+- [`train_with_mlflow()`](../main.py#L101) opens an MLflow run, lets steps 1-6
+  execute inside it, then logs the parameters, metrics, model, and config.
 
 The committed `__main__` block selects `train_with_mlflow()`.
 
