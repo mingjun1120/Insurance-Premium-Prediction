@@ -38,7 +38,10 @@ class TestLoadModel:
     def test_bundle_fields_are_read_onto_the_instance(self, predictor):
         assert predictor.model_name == "RandomForestRegressor"
         assert predictor.use_log_target is True
-        assert predictor.target == TARGET if hasattr(predictor, "target") else True
+        # `target` travels in the bundle for provenance only. Predictor unpacks
+        # the other five keys onto itself and never needs this one, so assert it
+        # on the bundle rather than on the instance.
+        assert predictor.artefact["target"] == TARGET
         assert predictor.categorical_features == CATEGORICAL
 
     def test_missing_model_says_what_to_do(self, tmp_path, monkeypatch):
