@@ -148,7 +148,22 @@ Open <http://127.0.0.1:5000>. Each tracked run includes:
 - test RMSE, MAE, R², and MAPE;
 - model name and tuning tags;
 - an MLflow model copy;
-- the exact `config.yml` used for the run.
+- the exact `config.yml` used for the run;
+- the git commit, branch, and repository, which MLflow records on its own;
+- `data_md5`, the DVC content hash of `data/` at the time of the run;
+- an `Uncommitted changes` tag.
+
+Those last three are what make a run rebuildable rather than just readable.
+Settings come from `config.yml`, code from the commit, and data from
+`data_md5`. The config alone is not enough, because the six cleaning thresholds
+are constants in `steps/clean.py` rather than configuration: change one and
+`config.yml` looks identical while the model is different.
+
+`Uncommitted changes` says whether that commit can be trusted. MLflow records
+the last commit without checking that the files on disk still match it, so a run
+trained with unsaved edits would otherwise point at code that never produced it.
+`yes` means treat the commit as approximate. `unknown` means git could not be
+reached.
 
 Use MLflow to compare experiments. Use `models/model.pkl` for the application.
 

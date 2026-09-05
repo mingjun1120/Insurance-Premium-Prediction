@@ -101,6 +101,13 @@ The explicit database path matters because the project directory contains
 spaces and an ampersand. It avoids MLflow creating URL-encoded look-alike
 folders.
 
+Every run also records what it would take to rebuild it: the git commit (MLflow
+adds this itself), a `data_md5` parameter holding the DVC content hash of
+`data/`, and an `Uncommitted changes` tag. Read that tag before trusting the
+commit — `yes` means the working tree had edits that were never committed, so
+the recorded commit does not describe the code that ran. See
+[model development](model-development.md) for the full list.
+
 ## Check for drift
 
 This project demonstrates monitoring; it does not monitor live traffic.
