@@ -13,13 +13,14 @@
         "id": "training",
         "label": "Training path",
         "focus": [
-          "nb01",
+          "raw",
+          "dataset",
           "data",
           "pipeline",
           "bundle",
           "mlflow"
         ],
-        "note": "Kaggle CSV to a fitted model bundle, with every run recorded."
+        "note": "dataset.py turns the raw download into one canonical table, then the pipeline fits a model and records the run."
       },
       {
         "id": "serving",
@@ -58,7 +59,7 @@
     ],
     "repository": {
       "url": "https://github.com/mingjun1120/Insurance-Premium-Prediction",
-      "revision": "7e6a93325a126644c20a584a133f241573ed21af"
+      "revision": "4eb8138b65fb920abb8f041f6e3afad5f73df33c"
     },
     "legend": {
       "mode": "all",
@@ -74,33 +75,13 @@
   },
   "components": [
     {
-      "id": "nb01",
-      "type": "backend",
-      "label": "Notebook 01",
-      "sublabel": "Kaggle CSV to merged_data",
-      "pos": [
-        40,
-        140
-      ],
-      "size": [
-        170,
-        64
-      ],
-      "sources": [
-        {
-          "path": "notebooks/01_load_data.ipynb",
-          "label": "load and merge"
-        }
-      ]
-    },
-    {
       "id": "data",
       "type": "database",
       "label": "Insurance data",
       "sublabel": "data/merged_data.csv",
       "pos": [
         320,
-        140
+        172
       ],
       "size": [
         150,
@@ -109,7 +90,7 @@
       "sources": [
         {
           "path": "config.yml",
-          "line": 10,
+          "line": 15,
           "label": "data_path"
         }
       ]
@@ -121,7 +102,7 @@
       "sublabel": "ingest, clean, train",
       "pos": [
         600,
-        140
+        172
       ],
       "size": [
         160,
@@ -143,7 +124,7 @@
       "tag": "carries use_log_target",
       "pos": [
         890,
-        140
+        172
       ],
       "size": [
         150,
@@ -164,7 +145,7 @@
       "sublabel": "runs, metrics, artefacts",
       "pos": [
         600,
-        258
+        290
       ],
       "size": [
         160,
@@ -185,7 +166,7 @@
       "sublabel": "reads data and model.pkl",
       "pos": [
         330,
-        25
+        57
       ],
       "size": [
         180,
@@ -375,14 +356,63 @@
           "label": "predict_records()"
         }
       ]
+    },
+    {
+      "id": "dataset",
+      "type": "backend",
+      "label": "dataset.py",
+      "sublabel": "stands in for data eng",
+      "pos": [
+        40,
+        172
+      ],
+      "size": [
+        170,
+        64
+      ],
+      "sources": [
+        {
+          "path": "dataset.py",
+          "line": 67,
+          "label": "main()"
+        }
+      ]
+    },
+    {
+      "id": "raw",
+      "type": "database",
+      "label": "Raw download",
+      "sublabel": "data/insurance.csv",
+      "pos": [
+        40,
+        57
+      ],
+      "size": [
+        170,
+        64
+      ],
+      "sources": [
+        {
+          "path": "config.yml",
+          "line": 10,
+          "label": "source_path"
+        }
+      ]
     }
   ],
   "boundaries": [
     {
       "kind": "region",
+      "label": "Source",
+      "wraps": [
+        "raw",
+        "dataset"
+      ]
+    },
+    {
+      "kind": "region",
       "label": "Training",
       "wraps": [
-        "nb01",
         "data",
         "pipeline",
         "bundle",
@@ -402,8 +432,18 @@
   ],
   "connections": [
     {
-      "id": "nb01-writes",
-      "from": "nb01",
+      "id": "raw-read",
+      "from": "raw",
+      "to": "dataset",
+      "label": "reads raw",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "dataset-writes",
+      "from": "dataset",
       "to": "data",
       "label": "writes CSV",
       "variant": "emphasis"
@@ -533,7 +573,7 @@
       "dot": "cyan",
       "title": "Train",
       "items": [
-        "Notebook 01 writes data/merged_data.csv",
+        "dataset.py writes data/merged_data.csv",
         "One command runs ingest, clean and train",
         "MLflow records parameters and metrics"
       ]

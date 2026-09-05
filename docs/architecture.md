@@ -53,7 +53,7 @@ This project has no data engineering team, so `dataset.py` stands in for that
 whole upstream. Today it does very little — one source, no join, so consolidation
 is a pass-through (notebook 01 section 1.4.1 records why). What matters is that the
 boundary is drawn and the code is on the right side of it. Everything from
-[`Ingestion.load_data()`](../steps/ingest.py#L23) onwards assumes the dataset
+[`Ingestion.load_data()`](../steps/ingest.py#L28) onwards assumes the dataset
 already exists and never asks where it came from.
 
 Notebooks are not on this path. Notebook 01 explains the business problem, the
@@ -76,7 +76,7 @@ person who has no access to the DVC remote.
 | Order | Code | Job |
 | ---: | --- | --- |
 | 1 | [`run_pipeline()`](../main.py#L50) | Orchestrate one complete run. |
-| 2 | [`Ingestion.load_data()`](../steps/ingest.py#L23) | Read the configured CSV. |
+| 2 | [`Ingestion.load_data()`](../steps/ingest.py#L28) | Read the configured CSV. |
 | 3 | [`Cleaner.clean_data()`](../steps/clean.py#L43) | Apply the seven cleaning rules. |
 | 4 | [`Trainer.train_model()`](../steps/train.py#L198) | Fit once or run grid search. |
 | 5 | [`Trainer.save_model()`](../steps/train.py#L257) | Save the model and its context together. |
