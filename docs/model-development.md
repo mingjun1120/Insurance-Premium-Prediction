@@ -162,8 +162,14 @@ are constants in `steps/clean.py` rather than configuration: change one and
 `Uncommitted changes` says whether that commit can be trusted. MLflow records
 the last commit without checking that the files on disk still match it, so a run
 trained with unsaved edits would otherwise point at code that never produced it.
-`yes` means treat the commit as approximate. `unknown` means git could not be
-reached.
+`yes` means there were unsaved edits, so treat the commit as approximate. `no`
+means the commit is trustworthy. `unknown` means git could not be reached.
+
+For a plain-English walkthrough of why a file path is not a data version, with
+diagrams and a worked example, see
+[Can You Rebuild This Model?](https://claude.ai/code/artifact/b309dabe-9db6-442d-a967-66313256055c)
+It is a companion page hosted outside this repository; everything it explains is
+also covered above.
 
 Use MLflow to compare experiments. Use `models/model.pkl` for the application.
 
