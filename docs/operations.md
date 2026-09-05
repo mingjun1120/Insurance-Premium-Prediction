@@ -19,7 +19,7 @@ uv run pytest
 uv run pytest -m slow
 ```
 
-The normal command collects 109 tests, deselects the slow marker, and runs 108
+The normal command collects 116 tests, deselects the slow marker, and runs 115
 when the DVC files are present. Without those files, affected tests skip with a
 reason.
 
@@ -29,6 +29,7 @@ data, or the bundle.
 
 | Test file | Protects |
 | --- | --- |
+| `test_dataset.py` | Building `data/merged_data.csv` from the raw download. |
 | `test_clean.py` | Each cleaning rule. |
 | `test_config.py` | Required configuration keys. |
 | `test_train.py` | Pipeline shape for all five models. |
