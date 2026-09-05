@@ -13,6 +13,7 @@ Run commands from the project root.
 | --- | --- | --- |
 | `uv sync` | Install serving and development dependencies. | Python 3.12 and uv. |
 | `uv run dvc pull` | Restore DVC-tracked data and models. | Azure credential. |
+| `uv run python dataset.py` | Build `data/merged_data.csv` from the raw download. | `data/insurance.csv` |
 | `uv run python main.py` | Clean, train, save, score, and log to MLflow. | `data/merged_data.csv` |
 | `uv run ruff check .` | Lint Python code. | Installed dependencies. |
 | `uv run pytest` | Run fast tests. | Installed dependencies. |
@@ -29,7 +30,8 @@ Run commands from the project root.
 
 | Path | Current value | Meaning |
 | --- | --- | --- |
-| `data.data_path` | `data/merged_data.csv` | Pipeline input. |
+| `data.source_path` | `data/insurance.csv` | Raw download; read by `dataset.py`. |
+| `data.data_path` | `data/merged_data.csv` | Pipeline input; written by `dataset.py`. |
 | `data.target` | `charges` | Prediction target. |
 | `train.test_size` | `0.2` | Held-out share. |
 | `train.random_state` | `42` | Reproducible split. |
@@ -114,6 +116,7 @@ bundle dict and is never read at runtime.
 .github/workflows/    CI and CD
 app.py                FastAPI service
 config.yml            Training and MLflow settings
+dataset.py            Builds the canonical dataset from the raw download
 Dockerfile            Two-stage serving image
 main.py               Training entry points
 samples.json          Three example bodies to paste into /docs (one at a time)
@@ -139,9 +142,9 @@ input:
 
 | File | Written by | Read by |
 | --- | --- | --- |
-| `insurance.csv` | Downloaded from Kaggle | Notebook 01 |
-| `merged_data.csv` | Notebook 01 | The training pipeline, plus notebooks 02 and 04 |
-| `cleaned_data.csv` | Notebook 02 | Notebook 03 |
+| `insurance.csv` | Downloaded from Kaggle | `dataset.py`, and notebook 01 |
+| `merged_data.csv` | `dataset.py` | The training pipeline, plus notebooks 02 and 04 |
+| `cleaned_data.csv` | Notebook 02 | Notebook 03 only; the pipeline cleans in memory and never writes this |
 | `production.csv` | Notebook 04 | Nothing; kept as the simulated drift sample |
 
 `config.yml` points `data.data_path` at `merged_data.csv`, not at

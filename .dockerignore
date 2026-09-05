@@ -21,6 +21,7 @@ data/
 # Analysis, not serving
 notebooks/
 main.py
+dataset.py
 
 # Python noise
 __pycache__/

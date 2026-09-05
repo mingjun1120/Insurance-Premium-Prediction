@@ -16,7 +16,7 @@ in reusable code.
 
 | Notebook | Main question | Output used later |
 | --- | --- | --- |
-| `01_load_data.ipynb` | Can the raw data be loaded into one clean table? | `data/merged_data.csv` |
+| `01_load_data.ipynb` | Can the raw data be loaded into one clean table? | The business framing and data dictionary; the code lives in `dataset.py` |
 | `02_eda_and_preprocessing.ipynb` | What is in the data, and which cleaning rules are justified? | `data/cleaned_data.csv`, and rules implemented in `steps/clean.py` |
 | `03_model_training.ipynb` | Which model and target treatment work best? | Winning parameters in `config.yml`, and `models/<winner>_insurance_model.pkl` |
 | `04_monitoring.ipynb` | Can Evidently detect a shifted current sample? | Two HTML reports in `reports/`, and `data/production.csv` |

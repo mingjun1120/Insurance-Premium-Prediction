@@ -9,6 +9,7 @@ Everything runs through `uv`. Python 3.12.
 ```bash
 uv sync                                  # dev + serving deps
 uv run dvc pull                          # restore data/ and models/ (gitignored, DVC-tracked)
+uv run python dataset.py                 # only if you cannot dvc pull: builds data/merged_data.csv
 
 uv run ruff check .                      # lint, exactly what CI runs
 uv run pytest                            # fast suite; `slow` excluded by addopts
@@ -46,11 +47,18 @@ first and find nothing.
 **Pipeline flow** — `main.py` calls `run_pipeline()`, which chains four modules in `steps/`:
 
 ```
-Ingestion.load_data()     data/merged_data.csv (raw; notebook 01 writes it)
+Ingestion.load_data()     data/merged_data.csv (raw; dataset.py writes it)
 Cleaner.clean_data()      7 rules, always in notebook 02's order
 Trainer.train_model()     build pipeline -> fit -> save_model()
 Predictor.evaluate_model()  scores both splits, always in dollars
 ```
+
+**`dataset.py` sits before all of that, and outside `steps/` on purpose.** It reads
+`data.source_path` (the raw Kaggle download) and writes `data.data_path`. That is the
+data-engineering boundary: in a company everything upstream of it would belong to another
+team, and the model side would start with a dataset already assembled. Nothing runs it
+automatically — CI and CD both use `dvc pull`, so the golden test scores the exact
+versioned data. It exists for the person who has no access to that remote.
 
 `main.py` has two entry points doing the same work; `train_with_mlflow()` is active and
 `main()` is commented out at the bottom. Both call the shared `run_pipeline()` and
@@ -123,7 +131,8 @@ there is no GPU) — splitting it into a second `RUN` reclaims nothing. Runtime 
 The three boosting libraries stay in the main `dependencies` on purpose: any of the five
 models can end up in `model.pkl`, and unpickling needs the library it came from.
 
-`.dockerignore` excludes `data/`, `main.py`, `notebooks/`, `mlflow/`, `.venv` and `*.dvc`,
+`.dockerignore` excludes `data/`, `main.py`, `dataset.py`, `notebooks/`, `mlflow/`, `.venv`
+and `*.dvc`,
 which is what keeps the build context at a few MB. If a change makes the image need a new
 file, check `.dockerignore` before wondering why it is missing at runtime.
 

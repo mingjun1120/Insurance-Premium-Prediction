@@ -5,8 +5,13 @@
 # it with every run.
 
 data:
-  # Notebook 01 writes this file. It is the raw input; steps/clean.py does the
-  # cleaning, so this is deliberately NOT data/cleaned_data.csv.
+  # The raw Kaggle download. dataset.py reads this and nothing else does; it is
+  # never written to, so it stays the immutable record of what arrived.
+  source_path: data/insurance.csv
+
+  # What dataset.py writes and the training pipeline reads. It is the raw input
+  # to the pipeline; steps/clean.py does the cleaning, so this is deliberately
+  # NOT data/cleaned_data.csv.
   data_path: data/merged_data.csv
   target: charges
 

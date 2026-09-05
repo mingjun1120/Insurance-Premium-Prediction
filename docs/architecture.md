@@ -30,6 +30,43 @@ is copied into the image at build time ([`Dockerfile`](../Dockerfile#L61)), whic
 why the model has to exist on disk before `docker build`, and why the running API
 reads the copy inside its own image rather than the DVC remote.
 
+The map is the full picture. The diagram at the top of the
+[README](../README.md) is a shorter version of the same system, and the two do
+not match node for node on purpose: the README answers "what is this project" in
+thirty seconds, this one answers "where does each piece live".
+
+## Where the data comes from
+
+The `00 SOURCE` zone holds the one piece of this project that is not machine
+learning. [`dataset.py`](../dataset.py) reads the raw Kaggle download and writes
+`data/merged_data.csv`, the single table everything downstream trains on.
+
+It sits outside `steps/` because it is a different job. In a company, the work of
+assembling that table usually belongs to a data engineering team, not to whoever
+builds the model. A common shape for it is a medallion pipeline: raw records land
+in a **bronze** layer, get conformed and deduplicated into **silver**, and are
+curated into **gold** tables built for a particular use. The model side then takes
+a gold table, combines what it needs, and produces one final dataset for analysis,
+cleaning and training.
+
+This project has no data engineering team, so `dataset.py` stands in for that
+whole upstream. Today it does very little — one source, no join, so consolidation
+is a pass-through (notebook 01 section 1.4.1 records why). What matters is that the
+boundary is drawn and the code is on the right side of it. Everything from
+[`Ingestion.load_data()`](../steps/ingest.py#L23) onwards assumes the dataset
+already exists and never asks where it came from.
+
+Notebooks are not on this path. Notebook 01 explains the business problem, the
+source and the data dictionary; `dataset.py` is the executable half. That is the
+same split as notebook 02 to `steps/clean.py`, and notebook 03 to `config.yml`.
+The one notebook that still appears on the map is 04, because a manually-run
+drift check is genuinely all the monitoring this project has.
+
+You will not normally run `dataset.py`. `uv run dvc pull` restores
+`data/merged_data.csv` along with everything else, and CI and CD use that path so
+the golden test always scores the exact versioned data. `dataset.py` is for the
+person who has no access to the DVC remote.
+
 ## Trace A: one training run
 
 ![One training run, top to bottom: read config.yml, load the CSV, run seven cleaning rules, split 80/20, fit, then save the bundle and score in dollars](diagrams/training-flow.svg)

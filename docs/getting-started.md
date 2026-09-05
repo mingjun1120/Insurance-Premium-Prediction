@@ -54,12 +54,14 @@ The credential goes to `.dvc/config.local`, which is ignored by Git. Never put
 the connection string in `.dvc/config`, a Dockerfile, or a commit.
 
 No Azure access? Download the Kaggle US Health Insurance dataset to
-`data/insurance.csv`, then run notebook 01. It creates the file used by the
-pipeline.
+`data/insurance.csv`, then build the file the pipeline reads:
 
 ```bash
-uv run jupyter lab notebooks/01_load_data.ipynb
+uv run python dataset.py
 ```
+
+That writes `data/merged_data.csv`. You still need `models/model.pkl`, so
+retrain in step 4 rather than skipping to step 5.
 
 ## 3. Check the repository
 
