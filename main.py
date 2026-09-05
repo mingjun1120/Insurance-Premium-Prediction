@@ -108,7 +108,10 @@ def read_uncommitted_changes():
     """Warn when the code on disk no longer matches the commit MLflow logged.
 
     Returns:
-        str: "yes", "no", or "unknown" if git cannot be reached.
+        str:
+            "yes" when there are unsaved edits, so the commit is a rough guide only.
+            "no" when the commit is trustworthy.
+            "unknown" if git could not be reached.
     """
     # Untracked files are ignored: a stray scratch file did not change the run.
     try:
