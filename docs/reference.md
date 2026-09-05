@@ -134,7 +134,7 @@ data.dvc               Pointer to data/
 models.dvc             Pointer to models/
 ```
 
-`dvc pull` restores four files into `data/`. Only one of them is the pipeline's
+`dvc pull` restores four files into `data/`. Only one of them is the pipeline’s
 input:
 
 | File | Written by | Read by |
@@ -147,6 +147,18 @@ input:
 `config.yml` points `data.data_path` at `merged_data.csv`, not at
 `cleaned_data.csv`. The pipeline cleans the raw file itself through
 `steps/clean.py`, so it never depends on a notebook having been run.
+
+The same pull restores two files into `models/`. Only the first is ever loaded:
+
+| File | Written by | Read by |
+| --- | --- | --- |
+| `model.pkl` | `Trainer.save_model()` | `Predictor`, the API, the Docker image |
+| `random_forest_insurance_model.pkl` | Notebook 03 | Nothing at runtime |
+
+Both hold the same six keys. The notebook saves its winner under a name built
+from the model, so a run that picks a different model writes a different
+filename. The pipeline always writes `model.pkl`, and `model.pkl` is the only
+one `config.yml` and the Dockerfile know about.
 
 Generated or external paths:
 
@@ -167,6 +179,9 @@ Generated or external paths:
 | Pull request | Yes | No |
 | Push to another branch | No | No |
 | Manual dispatch | No | Yes |
+
+The third row counts the `push` event only. Once that branch has an open pull
+request, every further push to it re-runs CI through the `pull_request` event.
 
 ## Known limits
 

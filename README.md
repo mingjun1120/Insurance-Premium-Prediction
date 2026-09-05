@@ -13,7 +13,7 @@ An end-to-end MLOps project that predicts annual medical insurance charges from 
 
 
 
-![Project overview](docs/diagrams/project-overview.svg)
+![The insurance CSV becomes a model bundle, DVC versions the data and the bundle, and a deploy gate decides whether that bundle is baked into the live API image](docs/diagrams/project-overview.svg)
 
 The project turns a notebook result into a repeatable training pipeline, a versioned model bundle, a tested API, and an Azure deployment.
 
@@ -100,8 +100,9 @@ back to US dollars.
 
 ## Documentation
 
-Read the five guides in order. Each one assumes the one before it, and every
-page repeats this path at the top so you always know where you are.
+Read the five guides in order. Each one assumes the one before it, and each
+carries this path at the top so you always know where you are. The reference
+page sits outside the path and can be opened at any point.
 
 | # | Read this | When you want to... |
 | --- | --- | --- |

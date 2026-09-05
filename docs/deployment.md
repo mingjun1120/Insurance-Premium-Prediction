@@ -7,7 +7,7 @@
 The model is served by FastAPI, packaged with Docker, and deployed by GitHub
 Actions to Azure Container Apps.
 
-![Deployment flow](diagrams/deployment-flow.svg)
+![A push to master logs in with OIDC, pulls DVC files, runs fast and slow tests, builds and pushes the image, updates the container app and smoke-tests it](diagrams/deployment-flow.svg)
 
 ## Run the serving image locally
 

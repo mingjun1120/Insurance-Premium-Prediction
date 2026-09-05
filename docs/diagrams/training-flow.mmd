@@ -1,4 +1,4 @@
-flowchart LR
+flowchart TD
     CMD([uv run python main.py]) --> CFG[Read config.yml]
     CFG --> LOAD[Load CSV]
     LOAD --> CLEAN[Run 7 cleaning rules]

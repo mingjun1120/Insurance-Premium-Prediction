@@ -6,7 +6,7 @@
 
 This page is the short runbook for tests, DVC, MLflow, and drift checks.
 
-![Local operations loop](diagrams/operations-loop.svg)
+![The local loop: pull, run fast tests, change something, train and log to MLflow, run the slow golden test, push with DVC, then review](diagrams/operations-loop.svg)
 
 ## Test before and after a change
 

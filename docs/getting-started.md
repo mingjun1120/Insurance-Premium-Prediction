@@ -7,7 +7,7 @@
 Use this page when you want one working prediction with the existing repository.
 You do not need to read the notebooks first.
 
-![Quick-start path](diagrams/quick-start.svg)
+![Install, pull the DVC files, optionally retrain, then start the API and open /docs](diagrams/quick-start.svg)
 
 ## What you need
 

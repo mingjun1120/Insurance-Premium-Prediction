@@ -12,7 +12,7 @@ decisions.
 
 ## System map
 
-![Insurance premium prediction system map](assets/architecture.png)
+![System map of the whole project: a training row from the Kaggle CSV to the model bundle, DVC and MLflow beside it, and a delivery row whose deploy gate feeds the serving image and the live API](assets/architecture.png)
 
 The large map is also available as an
 [interactive HTML view](assets/architecture.html). Download or open it locally
@@ -32,7 +32,7 @@ reads the copy inside its own image rather than the DVC remote.
 
 ## Trace A: one training run
 
-![Training flow](diagrams/training-flow.svg)
+![One training run, top to bottom: read config.yml, load the CSV, run seven cleaning rules, split 80/20, fit, then save the bundle and score in dollars](diagrams/training-flow.svg)
 
 `main.py` owns the order. The individual steps do not call each other.
 
@@ -56,7 +56,7 @@ The committed `__main__` block selects `train_with_mlflow()`.
 
 ## Trace B: one prediction request
 
-![Prediction request sequence](diagrams/prediction-request.svg)
+![A POST to /predict is validated by the Person schema, then steps.predict rebuilds the typed frame, calls the model and applies expm1 before returning dollars](diagrams/prediction-request.svg)
 
 Important details:
 

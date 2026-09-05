@@ -58,7 +58,7 @@
     ],
     "repository": {
       "url": "https://github.com/mingjun1120/Insurance-Premium-Prediction",
-      "revision": "406233f802b78c92e4ed086dbe5499ffc0f8cb54"
+      "revision": "7e6a93325a126644c20a584a133f241573ed21af"
     },
     "legend": {
       "mode": "all",
@@ -109,7 +109,7 @@
       "sources": [
         {
           "path": "config.yml",
-          "line": 9,
+          "line": 10,
           "label": "data_path"
         }
       ]

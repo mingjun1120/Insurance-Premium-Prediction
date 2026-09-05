@@ -85,8 +85,9 @@ Two kinds, and the split is what keeps CI credential-free:
   `models/model.pkl` or `data/merged_data.csv` are absent.
 
 `tests/test_predict.py::test_golden_rmse_has_not_moved` asserts RMSE 4193 / MAE 1974 /
-R² 0.9043 / MAPE 0.1655. **Those numbers also appear in the README table.** Any retrain
-that moves them must update both, in a commit that says why.
+R² 0.9043 / MAPE 0.1655. **The same four numbers appear in two more places: the README
+table and the one in `docs/model-development.md`.** Any retrain that moves them must
+update all three, in a commit that says why.
 
 ## DVC and secrets
 

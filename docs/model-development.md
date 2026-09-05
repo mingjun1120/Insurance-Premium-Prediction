@@ -7,7 +7,7 @@
 Use this page when you want to understand the data science, compare models, or
 retrain the saved bundle.
 
-![Model-development path](diagrams/model-development.svg)
+![Notebooks 01 to 03 lead to a model choice in config.yml, the pipeline saves the bundle, and notebook 04 checks it for drift](diagrams/model-development.svg)
 
 The notebooks explain decisions. The Python pipeline repeats those decisions
 in reusable code.
@@ -18,7 +18,7 @@ in reusable code.
 | --- | --- | --- |
 | `01_load_data.ipynb` | Can the raw data be loaded into one clean table? | `data/merged_data.csv` |
 | `02_eda_and_preprocessing.ipynb` | What is in the data, and which cleaning rules are justified? | `data/cleaned_data.csv`, and rules implemented in `steps/clean.py` |
-| `03_model_training.ipynb` | Which model and target treatment work best? | Winning parameters in `config.yml` |
+| `03_model_training.ipynb` | Which model and target treatment work best? | Winning parameters in `config.yml`, and `models/<winner>_insurance_model.pkl` |
 | `04_monitoring.ipynb` | Can Evidently detect a shifted current sample? | Two HTML reports in `reports/`, and `data/production.csv` |
 
 Run them in order. Notebook 03 reads `data/cleaned_data.csv`, which notebook 02
