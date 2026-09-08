@@ -31,7 +31,7 @@ def test_top_level_sections_are_present(config, section):
     assert section in config
 
 
-@pytest.mark.parametrize("key", ["data_path", "target"])
+@pytest.mark.parametrize("key", ["source_path", "data_path", "target"])
 def test_data_keys(config, key):
     assert key in config["data"]
 

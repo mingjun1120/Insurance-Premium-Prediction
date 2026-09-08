@@ -10,10 +10,15 @@ from steps import load_config, resolve
 class Ingestion:
     """Load the raw dataset that the rest of the pipeline works on.
 
-    Reads `data.data_path` from the configuration. That points at the raw file
-    rather than at `data/cleaned_data.csv` on purpose, so that `steps.clean`
+    Reads `data.data_path` from the configuration. That points at the file
+    `dataset.py` writes, not at `data/cleaned_data.csv`, so that `steps.clean`
     does the cleaning and the pipeline never depends on a notebook having been
     run first.
+
+    Everything upstream of this class - turning the raw download into one
+    canonical table - belongs to `dataset.py`. In a company that work would
+    usually sit with a data engineering team, and the model side would start
+    exactly here: with a dataset that is already assembled.
     """
 
     def __init__(self):
@@ -37,7 +42,8 @@ class Ingestion:
         """
         if not self.data_path.exists():
             raise FileNotFoundError(
-                f"No data file at {self.data_path}. Run notebook 01 to create it."
+                f"No data file at {self.data_path}. Run `uv run dvc pull`, or "
+                "`uv run python dataset.py` to build it from the raw download."
             )
 
         data = pd.read_csv(self.data_path)

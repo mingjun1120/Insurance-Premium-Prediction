@@ -7,7 +7,7 @@
 Use this page when you want to understand the data science, compare models, or
 retrain the saved bundle.
 
-![Model-development path](diagrams/model-development.svg)
+![Notebooks 01 to 03 lead to a model choice in config.yml, the pipeline saves the bundle, and notebook 04 checks it for drift](diagrams/model-development.svg)
 
 The notebooks explain decisions. The Python pipeline repeats those decisions
 in reusable code.
@@ -16,10 +16,15 @@ in reusable code.
 
 | Notebook | Main question | Output used later |
 | --- | --- | --- |
-| `01_load_data.ipynb` | Can the raw data be loaded into one clean table? | `data/merged_data.csv` |
-| `02_eda_and_preprocessing.ipynb` | What is in the data, and which cleaning rules are justified? | Rules implemented in `steps/clean.py` |
-| `03_model_training.ipynb` | Which model and target treatment work best? | Winning parameters in `config.yml` |
-| `04_monitoring.ipynb` | Can Evidently detect a shifted current sample? | Two HTML reports in `reports/` |
+| `01_load_data.ipynb` | Can the raw data be loaded into one clean table? | The business framing and data dictionary; the code lives in `dataset.py` |
+| `02_eda_and_preprocessing.ipynb` | What is in the data, and which cleaning rules are justified? | `data/cleaned_data.csv`, and rules implemented in `steps/clean.py` |
+| `03_model_training.ipynb` | Which model and target treatment work best? | Winning parameters in `config.yml`, and `models/<winner>_insurance_model.pkl` |
+| `04_monitoring.ipynb` | Can Evidently detect a shifted current sample? | Two HTML reports in `reports/`, and `data/production.csv` |
+
+Run them in order. Notebook 03 reads `data/cleaned_data.csv`, which notebook 02
+writes, so 03 cannot run on a fresh clone until either 02 has run or `dvc pull`
+has restored the file. The training pipeline does not share that dependency: it
+reads `data/merged_data.csv` and cleans it itself.
 
 The dataset has 1,338 rows. The target is annual medical insurance `charges`.
 The six input features are age, sex, BMI, number of children, smoking status,
@@ -143,7 +148,28 @@ Open <http://127.0.0.1:5000>. Each tracked run includes:
 - test RMSE, MAE, R², and MAPE;
 - model name and tuning tags;
 - an MLflow model copy;
-- the exact `config.yml` used for the run.
+- the exact `config.yml` used for the run;
+- the git commit, branch, and repository, which MLflow records on its own;
+- `data_md5`, the DVC content hash of `data/` at the time of the run;
+- an `Uncommitted changes` tag.
+
+Those last three are what make a run rebuildable rather than just readable.
+Settings come from `config.yml`, code from the commit, and data from
+`data_md5`. The config alone is not enough, because the six cleaning thresholds
+are constants in `steps/clean.py` rather than configuration: change one and
+`config.yml` looks identical while the model is different.
+
+`Uncommitted changes` says whether that commit can be trusted. MLflow records
+the last commit without checking that the files on disk still match it, so a run
+trained with unsaved edits would otherwise point at code that never produced it.
+`yes` means there were unsaved edits, so treat the commit as approximate. `no`
+means the commit is trustworthy. `unknown` means git could not be reached.
+
+For a plain-English walkthrough of why a file path is not a data version, with
+diagrams and a worked example, see
+[Can You Rebuild This Model?](https://claude.ai/code/artifact/b309dabe-9db6-442d-a967-66313256055c)
+It is a companion page hosted outside this repository; everything it explains is
+also covered above.
 
 Use MLflow to compare experiments. Use `models/model.pkl` for the application.
 

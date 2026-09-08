@@ -5,21 +5,34 @@
     "title": "Insurance Premium Prediction - System Map",
     "quality_profile": "showcase",
     "viewBox": [
-      1360,
-      860
+      1380,
+      735
     ],
     "views": [
       {
         "id": "training",
         "label": "Training path",
         "focus": [
-          "nb01",
+          "raw",
+          "dataset",
           "data",
           "pipeline",
           "bundle",
           "mlflow"
         ],
-        "note": "Kaggle CSV to a fitted model bundle, with every run recorded."
+        "note": "dataset.py turns the raw download into one canonical table, then the pipeline fits a model and records the run."
+      },
+      {
+        "id": "serving",
+        "label": "Serving path",
+        "focus": [
+          "bundle",
+          "image",
+          "live",
+          "api",
+          "caller"
+        ],
+        "note": "The bundle is baked into the image, and the same Predictor turns JSON into dollars."
       },
       {
         "id": "delivery",
@@ -28,8 +41,8 @@
           "dvc",
           "gha",
           "gate",
-          "acr",
-          "live"
+          "image",
+          "acr"
         ],
         "note": "A push to master only ships if the model still scores what it should."
       },
@@ -46,30 +59,21 @@
     ],
     "repository": {
       "url": "https://github.com/mingjun1120/Insurance-Premium-Prediction",
-      "revision": "04b36340aa087ce90cabe1f4cea278782be7fcd9"
+      "revision": "4eb8138b65fb920abb8f041f6e3afad5f73df33c"
+    },
+    "legend": {
+      "mode": "all",
+      "entries": {
+        "frontend": {
+          "visible": false
+        },
+        "messagebus": {
+          "visible": false
+        }
+      }
     }
   },
   "components": [
-    {
-      "id": "nb01",
-      "type": "backend",
-      "label": "Notebook 01",
-      "sublabel": "Kaggle CSV to merged_data",
-      "pos": [
-        40,
-        300
-      ],
-      "size": [
-        150,
-        64
-      ],
-      "sources": [
-        {
-          "path": "notebooks/01_load_data.ipynb",
-          "label": "load and merge"
-        }
-      ]
-    },
     {
       "id": "data",
       "type": "database",
@@ -77,7 +81,7 @@
       "sublabel": "data/merged_data.csv",
       "pos": [
         320,
-        300
+        172
       ],
       "size": [
         150,
@@ -86,7 +90,7 @@
       "sources": [
         {
           "path": "config.yml",
-          "line": 9,
+          "line": 15,
           "label": "data_path"
         }
       ]
@@ -98,7 +102,7 @@
       "sublabel": "ingest, clean, train",
       "pos": [
         600,
-        300
+        172
       ],
       "size": [
         160,
@@ -117,9 +121,10 @@
       "type": "database",
       "label": "Model bundle",
       "sublabel": "models/model.pkl",
+      "tag": "carries use_log_target",
       "pos": [
         890,
-        300
+        172
       ],
       "size": [
         150,
@@ -140,7 +145,7 @@
       "sublabel": "runs, metrics, artefacts",
       "pos": [
         600,
-        490
+        290
       ],
       "size": [
         160,
@@ -160,8 +165,8 @@
       "label": "Drift check",
       "sublabel": "reads data and model.pkl",
       "pos": [
-        320,
-        100
+        330,
+        57
       ],
       "size": [
         180,
@@ -181,11 +186,11 @@
       "label": "DVC remote",
       "sublabel": "Azure Blob Storage",
       "pos": [
-        1140,
-        570
+        40,
+        380
       ],
       "size": [
-        140,
+        160,
         64
       ],
       "sources": [
@@ -201,10 +206,10 @@
       "type": "security",
       "label": "GitHub Actions",
       "sublabel": "push to master",
-      "tag": "OIDC login, then dvc pull",
+      "tag": "OIDC login",
       "pos": [
         40,
-        720
+        495
       ],
       "size": [
         160,
@@ -225,8 +230,8 @@
       "sublabel": "tests, then golden check",
       "tag": "fail = nothing ships",
       "pos": [
-        315,
-        720
+        300,
+        495
       ],
       "size": [
         160,
@@ -242,16 +247,38 @@
       ]
     },
     {
+      "id": "image",
+      "type": "backend",
+      "label": "Serving image",
+      "sublabel": "app.py + steps + model.pkl",
+      "pos": [
+        600,
+        495
+      ],
+      "size": [
+        160,
+        64
+      ],
+      "sources": [
+        {
+          "path": "Dockerfile",
+          "line": 61,
+          "end_line": 63,
+          "label": "COPY app, steps, models"
+        }
+      ]
+    },
+    {
       "id": "acr",
       "type": "cloud",
       "label": "Container registry",
       "sublabel": "Azure ACR",
       "pos": [
-        590,
-        720
+        830,
+        495
       ],
       "size": [
-        160,
+        170,
         64
       ],
       "sources": [
@@ -264,16 +291,36 @@
       ]
     },
     {
+      "id": "caller",
+      "type": "external",
+      "label": "API caller",
+      "sublabel": "JSON over HTTPS",
+      "pos": [
+        560,
+        610
+      ],
+      "size": [
+        150,
+        64
+      ],
+      "sources": [
+        {
+          "path": "samples.json",
+          "label": "example request bodies"
+        }
+      ]
+    },
+    {
       "id": "live",
       "type": "cloud",
       "label": "Live API",
       "sublabel": "Azure Container Apps",
       "pos": [
-        865,
-        720
+        830,
+        610
       ],
       "size": [
-        160,
+        170,
         64
       ],
       "sources": [
@@ -285,16 +332,16 @@
       ]
     },
     {
-      "id": "caller",
-      "type": "external",
-      "label": "API caller",
-      "sublabel": "JSON over HTTPS",
+      "id": "api",
+      "type": "backend",
+      "label": "Prediction service",
+      "sublabel": "validate, then expm1 to USD",
       "pos": [
-        1140,
-        720
+        1100,
+        610
       ],
       "size": [
-        140,
+        180,
         64
       ],
       "sources": [
@@ -302,6 +349,53 @@
           "path": "app.py",
           "line": 90,
           "label": "POST /predict"
+        },
+        {
+          "path": "steps/predict.py",
+          "line": 74,
+          "label": "predict_records()"
+        }
+      ]
+    },
+    {
+      "id": "dataset",
+      "type": "backend",
+      "label": "dataset.py",
+      "sublabel": "stands in for data eng",
+      "pos": [
+        40,
+        172
+      ],
+      "size": [
+        170,
+        64
+      ],
+      "sources": [
+        {
+          "path": "dataset.py",
+          "line": 67,
+          "label": "main()"
+        }
+      ]
+    },
+    {
+      "id": "raw",
+      "type": "database",
+      "label": "Raw download",
+      "sublabel": "data/insurance.csv",
+      "pos": [
+        40,
+        57
+      ],
+      "size": [
+        170,
+        64
+      ],
+      "sources": [
+        {
+          "path": "config.yml",
+          "line": 10,
+          "label": "source_path"
         }
       ]
     }
@@ -309,9 +403,16 @@
   "boundaries": [
     {
       "kind": "region",
-      "label": "1 - Training",
+      "label": "Source",
       "wraps": [
-        "nb01",
+        "raw",
+        "dataset"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Training",
+      "wraps": [
         "data",
         "pipeline",
         "bundle",
@@ -320,26 +421,29 @@
     },
     {
       "kind": "region",
-      "label": "2 - Monitoring",
-      "wraps": [
-        "nb04"
-      ]
-    },
-    {
-      "kind": "region",
-      "label": "3 - Deployment",
+      "label": "Delivery",
       "wraps": [
         "gha",
         "gate",
-        "acr",
-        "live"
+        "image",
+        "acr"
       ]
     }
   ],
   "connections": [
     {
-      "id": "nb01-writes",
-      "from": "nb01",
+      "id": "raw-read",
+      "from": "raw",
+      "to": "dataset",
+      "label": "reads raw",
+      "variant": "default",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDy": 24
+    },
+    {
+      "id": "dataset-writes",
+      "from": "dataset",
       "to": "data",
       "label": "writes CSV",
       "variant": "emphasis"
@@ -366,7 +470,7 @@
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top",
-      "labelDy": 62
+      "labelDy": 26
     },
     {
       "id": "drift-ref",
@@ -378,38 +482,37 @@
       "toSide": "bottom"
     },
     {
+      "id": "drift-model",
+      "from": "bundle",
+      "to": "nb04",
+      "label": "scores both splits",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "right"
+    },
+    {
       "id": "dvc-bundle",
       "from": "dvc",
       "to": "bundle",
       "label": "pull / push",
-      "variant": "dashed",
-      "fromSide": "top",
-      "toSide": "bottom",
-      "via": [
-        [
-          1210,
-          430
-        ],
-        [
-          965,
-          430
-        ]
-      ]
+      "variant": "dashed"
     },
     {
       "id": "dvc-data",
       "from": "dvc",
       "to": "data",
       "label": "pull / push",
+      "variant": "dashed"
+    },
+    {
+      "id": "dvc-ci",
+      "from": "dvc",
+      "to": "gha",
+      "label": "dvc pull in CD",
       "variant": "dashed",
-      "fromSide": "left",
-      "toSide": "bottom",
-      "via": [
-        [
-          395,
-          602
-        ]
-      ]
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": 122
     },
     {
       "id": "gha-gate",
@@ -419,10 +522,27 @@
       "variant": "security"
     },
     {
-      "id": "gate-acr",
+      "id": "gate-image",
       "from": "gate",
+      "to": "image",
+      "label": "pass: docker build",
+      "variant": "emphasis"
+    },
+    {
+      "id": "bake-bundle",
+      "from": "bundle",
+      "to": "image",
+      "label": "baked in at build",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelSegment": 0
+    },
+    {
+      "id": "image-acr",
+      "from": "image",
       "to": "acr",
-      "label": "pass: build and push",
+      "label": "push :sha",
       "variant": "emphasis"
     },
     {
@@ -430,15 +550,22 @@
       "from": "acr",
       "to": "live",
       "label": "deploy image by SHA",
-      "variant": "emphasis"
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelDx": 144
     },
     {
       "id": "caller-live",
       "from": "caller",
       "to": "live",
-      "label": "POST /predict",
-      "fromSide": "left",
-      "toSide": "right"
+      "label": "POST /predict"
+    },
+    {
+      "id": "live-api",
+      "from": "live",
+      "to": "api",
+      "label": "runs uvicorn"
     }
   ],
   "cards": [
@@ -446,26 +573,27 @@
       "dot": "cyan",
       "title": "Train",
       "items": [
-        "Notebook 01 writes data/merged_data.csv",
+        "dataset.py writes data/merged_data.csv",
         "One command runs ingest, clean and train",
         "MLflow records parameters and metrics"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Serve",
+      "items": [
+        "model.pkl is baked into the image at build",
+        "steps.predict undoes the log transform",
+        "Training and the API share one Predictor"
       ]
     },
     {
       "dot": "rose",
       "title": "Ship",
       "items": [
-        "Tests and the golden check run before the build",
-        "GitHub Actions builds and pushes the image",
-        "A model that scores worse blocks the deploy"
-      ]
-    },
-    {
-      "dot": "violet",
-      "title": "Operate",
-      "items": [
-        "DVC pulls and pushes data and models",
-        "Drift is checked by hand against a simulated sample"
+        "Tests and the golden check run before build",
+        "A model that scores worse blocks the deploy",
+        "Images are tagged with the commit SHA"
       ]
     }
   ]

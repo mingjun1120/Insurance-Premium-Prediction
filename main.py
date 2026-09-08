@@ -1,6 +1,6 @@
 """Training pipeline entry point.
 
-Two functions do the same work. `main()` runs the pipeline on its own;
+Two functions do the same work. `main()` runs the pipeline on its own.
 `train_with_mlflow()` runs it inside an MLflow run so the parameters, metrics,
 model and config are recorded. Comment out whichever one you do not want at the
 bottom of this file.
@@ -10,10 +10,12 @@ paths cannot drift apart.
 """
 
 import logging
+import subprocess
 from datetime import datetime
 
 import mlflow
 import mlflow.sklearn
+import yaml
 
 from steps import CONFIG_PATH, PROJECT_ROOT, load_config
 from steps.clean import Cleaner
@@ -86,6 +88,47 @@ def run_pipeline():
     return trainer, params, train_metrics, test_metrics
 
 
+def read_data_version():
+    """Read the md5 DVC recorded for data/, so a run knows which data it used.
+
+    Returns:
+        str: The md5 from data.dvc, or "unknown" if it is missing or unreadable.
+    """
+    pointer = PROJECT_ROOT / "data.dvc"
+
+    try:
+        with open(pointer, encoding="utf-8") as file:
+            return yaml.safe_load(file)["outs"][0]["md5"]
+    except (OSError, yaml.YAMLError, KeyError, IndexError, TypeError):
+        # A broken pointer file must not throw away an hour of training.
+        return "unknown"
+
+
+def read_uncommitted_changes():
+    """Warn when the code on disk no longer matches the commit MLflow logged.
+
+    Returns:
+        str:
+            "yes" when there are unsaved edits, so the commit is a rough guide only.
+            "no" when the commit is trustworthy.
+            "unknown" if git could not be reached.
+    """
+    # Untracked files are ignored: a stray scratch file did not change the run.
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain", "--untracked-files=no"],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=10,
+            check=True,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return "unknown"
+
+    return "yes" if result.stdout.strip() else "no"
+
+
 def main():
     """Run the pipeline without MLflow tracking.
 
@@ -99,38 +142,21 @@ def main():
 
 
 def train_with_mlflow():
-    """Run the pipeline inside an MLflow run, recording everything about it.
+    """Run the pipeline and record the run in MLflow.
 
-    Logs the parameters the model actually ended up with, the four test metrics,
-    the fitted model, and `config.yml` itself as an artefact. That last one is
-    what makes a run reproducible: the metrics tell you how it went, the config
-    tells you how to do it again.
-
-    Returns:
-        None: Results are printed and recorded.
+    Logs the parameters, metrics, model, config.yml, the data version and
+    whether the code was committed - enough to rebuild the run later.
     """
     config = load_config()
     mlflow_config = config["mlflow"]
 
-    # Point MLflow at the database explicitly.
-    #
-    # Left alone, MLflow builds its own tracking URI from the working directory
-    # and URL-encodes it. This project's path contains spaces and an "&", which
-    # become "%20" and "%26" - and SQLAlchemy then reads those as ordinary
-    # characters rather than decoding them back. The result is a real folder
-    # called "Personal%20Project" appearing next to the real one.
-    #
-    # Note the paths below are built with as_posix() and a plain "file:" prefix
-    # rather than Path.as_uri(), because as_uri() percent-encodes and would
-    # reintroduce exactly that problem.
+    # Set this by hand: MLflow URL-encodes the path, and ours has spaces and "&".
+    # Same reason for as_posix() below - Path.as_uri() would re-encode it.
     tracking_db = PROJECT_ROOT / mlflow_config["tracking_db"]
     tracking_db.parent.mkdir(parents=True, exist_ok=True)
     mlflow.set_tracking_uri(f"sqlite:///{tracking_db.as_posix()}")
 
-    # Where the saved models and config snapshots go. An experiment's artifact
-    # folder is fixed when the experiment is first created and cannot be changed
-    # afterwards, so it has to be passed here - `set_experiment` alone would
-    # silently fall back to MLflow's default location.
+    # An experiment's artifact folder is fixed at creation, so pass it here.
     experiment_name = mlflow_config["experiment_name"]
     if mlflow.get_experiment_by_name(experiment_name) is None:
         artifacts = PROJECT_ROOT / mlflow_config["artifact_location"]
@@ -139,16 +165,7 @@ def train_with_mlflow():
 
     mlflow.set_experiment(experiment_name)
 
-    # Name the run after the model and the moment it started.
-    #
-    # Left to itself MLflow invents a random label such as "classy-wren-675",
-    # which says nothing about what was trained. The timestamp keeps repeat runs
-    # of the same model apart, and sorts them in order.
-    #
-    # The name does not carry the hyperparameters. They are logged separately by
-    # `mlflow.log_params` below, so the UI can show them as sortable columns -
-    # far more useful for comparing runs than a long name would be. Turn them on
-    # with the "Columns" button in the runs table.
+    # Otherwise MLflow invents a random name like "classy-wren-675".
     run_name = f"{config['model']['name']}-{datetime.now():%Y%m%d-%H%M%S}"
 
     with mlflow.start_run(run_name=run_name) as run:
@@ -159,27 +176,19 @@ def train_with_mlflow():
         mlflow.set_tag("Model developer", mlflow_config["developer"])
         mlflow.set_tag("Model name", trainer.model_name)
         mlflow.set_tag("Tuned", str(trainer.tune))
+        mlflow.set_tag("Uncommitted changes", read_uncommitted_changes())
 
         mlflow.log_params(params)
         mlflow.log_param("use_log_target", trainer.use_log_target)
+        mlflow.log_param("data_md5", read_data_version())
+
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("mae", mae)
         mlflow.log_metric("r2", r2)
         mlflow.log_metric("mape", mape)
 
-        # Save the model with "cloudpickle" instead of MLflow's default.
-        #
-        # MLflow 3 saves models using a tool called "skops". For safety, skops
-        # only knows how to save a fixed list of model types. Everything on that
-        # list comes from scikit-learn.
-        #
-        # Three of our five models are NOT from scikit-learn - LightGBM,
-        # XGBoost and CatBoost are separate libraries. skops does not know them,
-        # so it refuses to save them and the run fails.
-        #
-        # "cloudpickle" has no such list. It can save any model. We already save
-        # our own model with a similar tool in steps/train.py, so this does not
-        # make the project any less safe than it already was.
+        # cloudpickle: MLflow's default (skops) cannot save LightGBM,
+        # XGBoost or CatBoost.
         mlflow.sklearn.log_model(
             trainer.model, name="model", serialization_format="cloudpickle"
         )

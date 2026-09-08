@@ -12,11 +12,12 @@ decisions.
 
 ## System map
 
-![Insurance premium prediction system map](assets/architecture.png)
+![System map of the whole project: a training row from the Kaggle CSV to the model bundle, DVC and MLflow beside it, and a delivery row whose deploy gate feeds the serving image and the live API](assets/architecture.png)
 
 The large map is also available as an
 [interactive HTML view](assets/architecture.html). Download or open it locally
-to switch themes, search nodes, and inspect the linked source locations.
+to switch themes, search nodes, step through the four guided views, and inspect
+the linked source locations.
 
 There are three paths to remember:
 
@@ -24,32 +25,75 @@ There are three paths to remember:
 - **Serve:** JSON → validation → shared predictor → premium in dollars.
 - **Ship:** GitHub Actions → tests → Docker image → Azure Container Apps.
 
+The arrow worth tracing twice is **Model bundle → Serving image**. `models/model.pkl`
+is copied into the image at build time ([`Dockerfile`](../Dockerfile#L61)), which is
+why the model has to exist on disk before `docker build`, and why the running API
+reads the copy inside its own image rather than the DVC remote.
+
+The map is the full picture. The diagram at the top of the
+[README](../README.md) is a shorter version of the same system, and the two do
+not match node for node on purpose: the README answers "what is this project" in
+thirty seconds, this one answers "where does each piece live".
+
+## Where the data comes from
+
+The `00 SOURCE` zone holds the one piece of this project that is not machine
+learning. [`dataset.py`](../dataset.py) reads the raw Kaggle download and writes
+`data/merged_data.csv`, the single table everything downstream trains on.
+
+It sits outside `steps/` because it is a different job. In a company, the work of
+assembling that table usually belongs to a data engineering team, not to whoever
+builds the model. A common shape for it is a medallion pipeline: raw records land
+in a **bronze** layer, get conformed and deduplicated into **silver**, and are
+curated into **gold** tables built for a particular use. The model side then takes
+a gold table, combines what it needs, and produces one final dataset for analysis,
+cleaning and training.
+
+This project has no data engineering team, so `dataset.py` stands in for that
+whole upstream. Today it does very little — one source, no join, so consolidation
+is a pass-through (notebook 01 section 1.4.1 records why). What matters is that the
+boundary is drawn and the code is on the right side of it. Everything from
+[`Ingestion.load_data()`](../steps/ingest.py#L28) onwards assumes the dataset
+already exists and never asks where it came from.
+
+Notebooks are not on this path. Notebook 01 explains the business problem, the
+source and the data dictionary; `dataset.py` is the executable half. That is the
+same split as notebook 02 to `steps/clean.py`, and notebook 03 to `config.yml`.
+The one notebook that still appears on the map is 04, because a manually-run
+drift check is genuinely all the monitoring this project has.
+
+You will not normally run `dataset.py`. `uv run dvc pull` restores
+`data/merged_data.csv` along with everything else, and CI and CD use that path so
+the golden test always scores the exact versioned data. `dataset.py` is for the
+person who has no access to the DVC remote.
+
 ## Trace A: one training run
 
-![Training flow](diagrams/training-flow.svg)
+![One training run, top to bottom: read config.yml, load the CSV, run seven cleaning rules, split 80/20, fit, then save the bundle and score in dollars](diagrams/training-flow.svg)
 
 `main.py` owns the order. The individual steps do not call each other.
 
 | Order | Code | Job |
 | ---: | --- | --- |
 | 1 | [`run_pipeline()`](../main.py#L50) | Orchestrate one complete run. |
-| 2 | [`Ingestion.load_data()`](../steps/ingest.py#L23) | Read the configured CSV. |
+| 2 | [`Ingestion.load_data()`](../steps/ingest.py#L28) | Read the configured CSV. |
 | 3 | [`Cleaner.clean_data()`](../steps/clean.py#L43) | Apply the seven cleaning rules. |
 | 4 | [`Trainer.train_model()`](../steps/train.py#L198) | Fit once or run grid search. |
 | 5 | [`Trainer.save_model()`](../steps/train.py#L257) | Save the model and its context together. |
 | 6 | [`Predictor.evaluate_model()`](../steps/predict.py#L104) | Report RMSE, MAE, R², and MAPE in dollars. |
-| 7 | [`train_with_mlflow()`](../main.py#L101) | Log parameters, metrics, model, and config. |
 
-Two entry points share `run_pipeline()`:
+Two entry points wrap that table; both call `run_pipeline()`, so neither can
+drift from the other:
 
-- `main()` prints the result only.
-- `train_with_mlflow()` prints and records the same result.
+- [`main()`](../main.py#L89) prints the result only.
+- [`train_with_mlflow()`](../main.py#L101) opens an MLflow run, lets steps 1-6
+  execute inside it, then logs the parameters, metrics, model, and config.
 
 The committed `__main__` block selects `train_with_mlflow()`.
 
 ## Trace B: one prediction request
 
-![Prediction request sequence](diagrams/prediction-request.svg)
+![A POST to /predict is validated by the Person schema, then steps.predict rebuilds the typed frame, calls the model and applies expm1 before returning dollars](diagrams/prediction-request.svg)
 
 Important details:
 

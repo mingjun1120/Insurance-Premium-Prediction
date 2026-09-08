@@ -6,7 +6,7 @@
 
 This page is the short runbook for tests, DVC, MLflow, and drift checks.
 
-![Local operations loop](diagrams/operations-loop.svg)
+![The local loop: pull, run fast tests, change something, train and log to MLflow, run the slow golden test, push with DVC, then review](diagrams/operations-loop.svg)
 
 ## Test before and after a change
 
@@ -19,7 +19,7 @@ uv run pytest
 uv run pytest -m slow
 ```
 
-The normal command collects 109 tests, deselects the slow marker, and runs 108
+The normal command collects 116 tests, deselects the slow marker, and runs 115
 when the DVC files are present. Without those files, affected tests skip with a
 reason.
 
@@ -29,6 +29,7 @@ data, or the bundle.
 
 | Test file | Protects |
 | --- | --- |
+| `test_dataset.py` | Building `data/merged_data.csv` from the raw download. |
 | `test_clean.py` | Each cleaning rule. |
 | `test_config.py` | Required configuration keys. |
 | `test_train.py` | Pipeline shape for all five models. |
@@ -100,6 +101,13 @@ The explicit database path matters because the project directory contains
 spaces and an ampersand. It avoids MLflow creating URL-encoded look-alike
 folders.
 
+Every run also records what it would take to rebuild it: the git commit (MLflow
+adds this itself), a `data_md5` parameter holding the DVC content hash of
+`data/`, and an `Uncommitted changes` tag. Read that tag before trusting the
+commit — `yes` means the working tree had edits that were never committed, so
+the recorded commit does not describe the code that ran. See
+[model development](model-development.md) for the full list.
+
 ## Check for drift
 
 This project demonstrates monitoring; it does not monitor live traffic.
@@ -114,6 +122,11 @@ Run the notebook from top to bottom. It creates:
 | --- | --- |
 | `reports/baseline_drift.html` | Training split vs test split. |
 | `reports/production_drift.html` | Training split vs a deliberately shifted sample. |
+
+It also writes the shifted sample itself to `data/production.csv`, which is
+inside the DVC-tracked `data/` directory. The sample is seeded, so a re-run
+normally reproduces the same file and `dvc status` stays quiet; check it after
+changing the simulation.
 
 The shifted sample is simulated and contains no real production traffic.
 
