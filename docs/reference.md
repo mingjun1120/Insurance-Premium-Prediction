@@ -18,7 +18,8 @@ Run commands from the project root.
 | `uv run ruff check .` | Lint Python code. | Installed dependencies. |
 | `uv run pytest` | Run fast tests. | Installed dependencies. |
 | `uv run pytest -m slow` | Check the saved model on real data. | Data and model bundle. |
-| `uv run uvicorn app:app --reload` | Start the local API. | Model bundle. |
+| `uv run python -m uvicorn app:app --reload` | Start the local API. | Model bundle. |
+| `taskkill /PID <id> /T /F` (Windows) | Stop an API that survived `Ctrl` + `C`. | The process ID from `netstat -ano \| findstr :8000`. |
 | `uv run mlflow ui --backend-store-uri sqlite:///mlflow/mlflow.db` | Open experiment tracking. | At least one tracked run. |
 | `uv run jupyter lab` | Open notebooks. | Installed development dependencies. |
 | `docker build -t insurance-premium .` | Build the serving image. | Model bundle. |

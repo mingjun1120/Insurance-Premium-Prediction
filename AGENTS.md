@@ -19,7 +19,7 @@ uv run pytest -rs                        # -rs prints each skip reason (-v alone
 
 uv run python main.py                    # full training run -> models/model.pkl + MLflow
 uv run mlflow ui --backend-store-uri sqlite:///mlflow/mlflow.db
-uv run uvicorn app:app --reload          # API on http://127.0.0.1:8000/docs
+uv run python -m uvicorn app:app --reload  # API on http://127.0.0.1:8000/docs
 
 docker build -t insurance-premium .      # needs models/model.pkl on disk first
 docker run --rm -p 8000:8000 insurance-premium

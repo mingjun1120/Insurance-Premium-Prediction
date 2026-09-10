@@ -36,7 +36,7 @@ Run from the project root:
 uv sync
 uv run dvc pull
 uv run pytest
-uv run uvicorn app:app --reload
+uv run python -m uvicorn app:app --reload
 ```
 
 Open <http://127.0.0.1:8000/docs>, choose `POST /predict`, and use:
