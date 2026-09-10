@@ -31,7 +31,7 @@ train:
 
 # ============ CHANGE THIS ONE LINE TO SWITCH MODELS ============
 model:
-  name: RandomForestRegressor
+  name: LGBMRegressor
 
   # false -> fit once with the params below (fast, and they are already the
   #          tuned winners from notebook 03)
