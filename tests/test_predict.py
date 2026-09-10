@@ -173,7 +173,7 @@ def test_golden_rmse_has_not_moved():
 
     rmse, mae, r2, mape = Predictor().evaluate_model(X_test, y_test)
 
-    assert rmse == pytest.approx(4193, abs=1)
-    assert mae == pytest.approx(1974, abs=1)
-    assert r2 == pytest.approx(0.9043, abs=0.0001)
-    assert mape == pytest.approx(0.1655, abs=0.0001)
+    assert rmse == pytest.approx(4351, abs=1)
+    assert mae == pytest.approx(2027, abs=1)
+    assert r2 == pytest.approx(0.8970, abs=0.0001)
+    assert mape == pytest.approx(0.1628, abs=0.0001)

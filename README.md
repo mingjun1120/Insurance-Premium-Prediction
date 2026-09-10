@@ -89,11 +89,16 @@ Test-set results from notebook 03 and the production pipeline:
 
 | Model | RMSE | MAE | R² | MAPE |
 | --- | ---: | ---: | ---: | ---: |
-| **Random Forest** | **$4,193** | $1,974 | 0.9043 | 0.1655 |
+| Random Forest | **$4,193** | $1,974 | **0.9043** | 0.1655 |
 | XGBoost | $4,345 | $2,032 | 0.8972 | 0.1643 |
-| LightGBM | $4,351 | $2,027 | 0.8970 | 0.1628 |
+| **LightGBM** (active) | $4,351 | $2,027 | 0.8970 | **0.1628** |
 | CatBoost | $4,399 | $2,180 | 0.8947 | 0.1772 |
 | Linear Regression | $4,942 | $2,577 | 0.8671 | 0.1806 |
+
+`config.yml` currently selects **LightGBM**, so that is the model saved in
+`models/model.pkl` and running in the deployed API. Random Forest has the lowest
+RMSE and R2 in this table; LightGBM has the lowest MAPE. Bold marks the best value
+in each column.
 
 The model trains on `log1p(charges)` but every metric and API result is converted
 back to US dollars.
