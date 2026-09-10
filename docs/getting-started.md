@@ -94,7 +94,7 @@ The committed entry point runs with MLflow tracking. It:
 ## 5. Start the API
 
 ```bash
-uv run uvicorn app:app --reload
+uv run python -m uvicorn app:app --reload
 ```
 
 Open <http://127.0.0.1:8000/docs>. Choose `POST /predict`, select **Try it
@@ -124,6 +124,29 @@ The response has this shape:
 Your number can change after retraining. It should still be a positive amount
 in US dollars.
 
+## 6. Stop the API
+
+Select the terminal window that is running the API. Press `Ctrl` + `C` once and
+wait a few seconds.
+
+On Windows the server sometimes keeps running after `Ctrl` + `C`. `uv` and the
+`--reload` watcher each add a process, and the signal does not always reach the
+one holding the port. Check whether it is still there:
+
+```bash
+netstat -ano | findstr :8000
+```
+
+If a line comes back, the last number on that line is the process ID. Stop it
+and everything below it:
+
+```bash
+taskkill /PID <process-id> /T /F
+```
+
+On macOS or Linux, use `lsof -i :8000` to find the process ID, then
+`kill -9 <process-id>`.
+
 ## Common problems
 
 | What you see | Meaning | Fix |
@@ -131,6 +154,7 @@ in US dollars.
 | `No model at .../models/model.pkl` | The API loads the model at startup. | Run `uv run dvc pull` or train the model. |
 | DVC returns `403` | Azure accepted the identity but it cannot read the blob container. | Add `Storage Blob Data Reader` or use a valid local connection string. |
 | API returns `422` | One or more fields are missing or outside the training range. | Read the reason in the response and correct the input. |
+| `address already in use` on port 8000 | An earlier API run never stopped. | See [6. Stop the API](#6-stop-the-api). |
 | MLflow cannot find runs | The UI is using a different store. | Start it with the command below. |
 
 ## Useful next commands
