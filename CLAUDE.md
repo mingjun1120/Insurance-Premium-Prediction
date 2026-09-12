@@ -92,13 +92,14 @@ Two kinds, and the split is what keeps CI credential-free:
 - **Artefact** — marked `@requires_model` / `@requires_data`, and *skip* (never fail) when
   `models/model.pkl` or `data/merged_data.csv` are absent.
 
-`tests/test_predict.py::test_golden_rmse_has_not_moved` asserts RMSE 4351 / MAE 2027 /
-R² 0.8970 / MAPE 0.1628 — the scores of whatever `config.yml` selects, currently
-`LGBMRegressor`. **The same four numbers appear in four more places: the README table,
-the one in `docs/model-development.md`, the `Examples:` block of
+`tests/test_predict.py::test_golden_rmse_has_not_moved` asserts RMSE 4193 / MAE 1974 /
+R² 0.9043 / MAPE 0.1655 — the scores of whatever `config.yml` selects, currently
+`RandomForestRegressor`. **The same four numbers appear in four more places: the
+README table, the one in `docs/model-development.md`, the `Examples:` block of
 `Predictor.evaluate_model` in `steps/predict.py`, and this paragraph — which is
 duplicated in both `CLAUDE.md` and `AGENTS.md`.** Any retrain that moves them must
-update every one, in a commit that says why.
+update every one, in a commit that says why. `cd.yml` separately refuses to deploy
+when the pulled `model.pkl` is not the model `config.yml` names.
 
 ## DVC and secrets
 

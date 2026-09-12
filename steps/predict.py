@@ -119,7 +119,7 @@ class Predictor:
         Examples:
             >>> rmse, mae, r2, mape = Predictor().evaluate_model(X_test, y_test)
             >>> round(rmse)
-            4351
+            4193
         """
         predicted = self.predict(X)
 
