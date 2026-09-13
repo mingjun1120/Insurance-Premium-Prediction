@@ -106,16 +106,15 @@ Test-set results from notebook 03, reproduced by the pipeline:
 
 | Model | RMSE | MAE | R² | MAPE |
 | --- | ---: | ---: | ---: | ---: |
-| Random Forest | **$4,193** | $1,974 | **0.9043** | 0.1655 |
+| **Random Forest** (active) | **$4,193** | **$1,974** | **0.9043** | 0.1655 |
 | XGBoost | $4,345 | $2,032 | 0.8972 | 0.1643 |
-| **LightGBM** (active) | $4,351 | $2,027 | 0.8970 | **0.1628** |
+| LightGBM | $4,351 | $2,027 | 0.8970 | **0.1628** |
 | CatBoost | $4,399 | $2,180 | 0.8947 | 0.1772 |
 | Linear Regression | $4,942 | $2,577 | 0.8671 | 0.1806 |
 
-`config.yml` currently selects **LightGBM**, so that is the model in
-`models/model.pkl` and in the deployed image. Random Forest has the lowest test
-RMSE in this table, and LightGBM the lowest MAPE. Bold marks the best value in
-each column.
+`config.yml` currently selects **Random Forest**, so that is the model in
+`models/model.pkl` and in the deployed image. Bold marks the best value in each
+column: Random Forest wins RMSE, MAE and R2, LightGBM wins MAPE.
 
 The table is evidence for this dataset and this split. It is not a claim that any
 one model is always best. Change the active model in `config.yml`, retrain, then

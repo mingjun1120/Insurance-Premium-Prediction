@@ -61,6 +61,38 @@ jobs:
       - name: Fetch the model and data from DVC
         run: uv run dvc pull
 
+      # The failure this catches: someone retrains, commits and pushes, but never
+      # runs `dvc add models` + `dvc push`. models.dvc then still points at the
+      # PREVIOUS model, the pull above fetches that one, the golden test passes
+      # against it, and the deploy ships the wrong model while reporting success.
+      # That happened on 2026-09-10: the live API served a Random Forest for a
+      # commit whose config.yml said LGBMRegressor, and nothing failed.
+      #
+      # config.yml is the source of truth for which model is active, so compare it
+      # against what actually arrived. Read through Predictor, so this loads the
+      # bundle by exactly the path the API uses.
+      - name: Check the pulled model is the one config.yml selects
+        run: |
+          uv run python - <<'PY'
+          import sys
+
+          from steps import load_config
+          from steps.predict import Predictor
+
+          wanted = load_config()["model"]["name"]
+          got = Predictor().model_name
+
+          if wanted != got:
+              print(
+                  "::error::config.yml selects %s but the pulled model.pkl holds %s. "
+                  "The DVC pointer is stale - run `dvc add models`, then `dvc push`, "
+                  "then commit models.dvc." % (wanted, got)
+              )
+              sys.exit(1)
+
+          print("config.yml and the pulled model agree: %s" % got)
+          PY
+
       - name: Test
         run: uv run pytest
 
